@@ -1,0 +1,24 @@
+%p#notice= notice
+
+#show_body
+  = image_tag "#{@picture.filename.url}"
+  = image_tag "like.png",id: :like,name: @picture.id
+  %span.all_likes
+    all likes :
+  %p
+    Title:
+    = @picture.title
+
+
+
+= link_to 'Back', pictures_path
+.span11
+  .span11
+    = form_for [@picture,Comment.new], :html => {:class => "form-inline"} do |f|
+      .input-append
+        = f.text_area :body, style: "height:39px;width:680px", :placeholder => "Write your comment here"
+        = f.submit "Add comment", class: "btn", style: " height:50px;"
+%h2 Comments
+#comments
+  -@picture.comments.each do |comment|
+    = render :partial => 'comments/comment', :locals => {:comment => comment}

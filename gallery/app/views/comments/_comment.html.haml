@@ -1,0 +1,10 @@
+.comments-box
+  %div
+    %h6
+      Posted
+      =time_ago_in_words(comment.created_at)
+      %br
+      Sender :
+      =comment.user.email
+      %br
+      =comment.body

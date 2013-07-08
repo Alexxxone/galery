@@ -1,0 +1,152 @@
+// Place all the styles related to the Pictures controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+a{
+  text-decoration:none;
+}
+a:hover{
+  text-decoration:none;
+  background-color: none;
+}
+.all_likes{
+  color:white;
+  position: relative;
+  top: -40px;
+  left: 30px;
+}
+
+#show_body{
+  width:300px;
+}
+//Like image
+#like{
+  height:30px;
+  position: relative;
+  top: -40px;
+  left: 10px;
+}
+#like:hover{
+  opacity:1;
+  cursor:pointer;
+}
+
+//TITLE ON HOVER PICTURE
+figure {
+  display: block;
+  position: relative;
+  float: left;
+  overflow: hidden;
+  margin: 0 20px 20px 0;
+}
+figcaption {
+  position: absolute;
+  background: black;
+  background: rgba(0,0,0,0.75);
+  color: white;
+  padding: 10px 20px;
+  opacity: 0;
+  -webkit-transition: all 0.6s ease;
+  -moz-transition:    all 0.6s ease;
+  -o-transition:      all 0.6s ease;
+}
+figure:hover figcaption {
+  opacity: 1;
+}
+figure:before {
+  content: "?";
+  position: absolute;
+  font-weight: 800;
+  background: black;
+  background: rgba(255,255,255,0.75);
+  text-shadow: 0 0 5px white;
+  color: black;
+  width: 24px;
+  height: 24px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius:    12px;
+  border-radius:         12px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 24px;
+  -moz-transition: all 0.6s ease;
+  opacity: 0.75;
+}
+figure:hover:before {
+  opacity: 0;
+}
+
+.cap-left:before {  bottom: 10px; left: 10px; }
+.cap-left figcaption { bottom: 5%; left: -30%; }
+.cap-left:hover figcaption { left: 0; }
+
+.cap-right:before { bottom: 10px; right: 10px; }
+.cap-right figcaption { bottom: 0; right: -30%; }
+.cap-right:hover figcaption { right: 0; }
+
+.cap-top:before { top: 10px; left: 10px; }
+.cap-top figcaption { left: 0; top: -30%; }
+.cap-top:hover figcaption { top: 0; }
+
+.cap-bot:before { bottom: 10px; left: 10px; }
+.cap-bot figcaption { left: 0; bottom: -30%;}
+.cap-bot:hover figcaption { bottom: 0; }
+
+
+
+.content{
+  right: 40px;
+  left: 30%;
+  top: 0px;
+  position: absolute;
+  padding-bottom: 30px;
+}
+.content h2{
+  font-size: 50px;
+  padding: 10px 0px 20px 0px;
+  margin-top: 52px;
+  color: #fff;
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0px 1px 1px rgba(0,0,0,0.3);
+}
+.content p{
+  font-size: 18px;
+  padding: 10px;
+  line-height: 24px;
+  color: #fff;
+  display: inline-block;
+  background: black;
+  padding: 10px;
+  margin: 3px 0px;
+}
+.panel{
+  min-width: 100%;
+  height: 98%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  margin-top: -150%;
+  background-color: #87cfe6;
+  box-shadow: 0px 4px 7px rgba(0,0,0,0.6);
+  opacity: 0;
+  z-index:2;
+  -webkit-transition: opacity .6s ease-in-out;
+  -moz-transition: opacity .6s ease-in-out;
+  -o-transition: opacity .6s ease-in-out;
+  -ms-transition: opacity .6s ease-in-out;
+  transition: opacity .6s ease-in-out;
+}
+.panel:target{
+  opacity: 1;
+  margin-top: 0%;
+}
+#home:target ~ #header #navigation #link-home,
+#portfolio:target ~ #header #navigation #link-portfolio,
+#about:target ~ #header #navigation #link-about,
+#contact:target ~ #header #navigation #link-contact{
+  background: #000;
+  color: #fff;
+}
+
