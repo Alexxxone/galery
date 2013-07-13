@@ -84,6 +84,10 @@ class CreatePictures < ActiveRecord::Migration
       t.string :name
       t.string :oauth_token
       t.datetime :oauth_expires_at
+      ##Event
+      t.datetime :like_time
+      t.datetime :cancel_like_time
+      t.datetime :comment_time
 
       t.timestamps
     end

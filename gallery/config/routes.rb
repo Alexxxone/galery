@@ -1,5 +1,7 @@
 Gallery::Application.routes.draw do
   get 'pictures/select' => 'pictures#select'
+  get "admin/events/:id" => "admin/events#show"
+
   post 'categories/subscribe' => 'categories#subscribe'
   post 'categories/check_subscribe' => 'categories#check_subscribe'
   post 'pictures/' => 'pictures#search'
@@ -13,10 +15,8 @@ Gallery::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-
-  ActiveAdmin.routes(self)
-
   post "/admin/parser/create_picture" => "admin/parser#create_picture"
+
   resources :categories do
     resources :pictures , only:[:index,:show]
   end

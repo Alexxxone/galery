@@ -6,7 +6,6 @@
 $(document).ready ->
   $(".save_img").click (event)->
     selectedCategories = $(event.currentTarget).parent().find("input[type=checkbox]:checked").map( (index, input)-> $(input).val() ).toArray()
-    console.log selectedCategories
     $.ajax(
       url: "/admin/parser/create_picture"
       data:

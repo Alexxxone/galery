@@ -15,7 +15,30 @@ class User < ActiveRecord::Base
   has_many :categories,:through => :user_categories
   apply_simple_captcha :message => "The secret Image and code were different"
 
-
-
+  attr_accessor :current_sign_in_at, :like_time, :cancel_like_time, :comment_time
+  #
+  #state_machine do
+  #  state :current_sign_in_at
+  #  state :like_time
+  #  state :cancel_like_time
+  #
+  #  event :change_like do
+  #    transitions :to => :like_time,    :from => [:current_sign_in_at], :on_transition => :like_time_write
+  #    transitions :to => :like_time, :from => [:cancel_like_time], :on_transition => :cancel_like_time_write
+  #    transitions :to => :green,  :from => [:red]
+  #  end
+  #
+  #
+  #
+  #
+  #  def like_time_write
+  #    current_user.like_time = Time.now
+  #  end
+  #
+  #  def cancel_like_time_write
+  #    current_user.cancel_like_time = Time.now
+  #  end
+  #
+  #end
 end
 

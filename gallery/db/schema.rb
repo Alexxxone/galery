@@ -92,6 +92,9 @@ ActiveRecord::Schema.define(:version => 20130711154726) do
     t.string   "name"
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
+    t.datetime "like_time"
+    t.datetime "cancel_like_time"
+    t.datetime "comment_time"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
   end
