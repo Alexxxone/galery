@@ -14,4 +14,6 @@
 #= require jquery_ujs
 #= require jquery.ui.all
 #= require pictures
+#= require active_admin
+
 

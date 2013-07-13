@@ -1,16 +1,22 @@
-#header
+.search.pull-right
+  = form_for Picture.new, :url => pictures_path do |f|
+    = f.text_field :title, placeholder: t('pictures.placeholder')
+    = f.submit value: t('buttons.search'),class: 'btn'
+#header.span4
   %ul#navigation
     - @categories.each do |category|
       %li{id: 'link-'"#{category.name}"}
+        =image_tag 'subscribe.png',class:'pull-right subscribe',name:category.id
         = link_to "#{category.name}", controller: "pictures", action: "select", id: category.name
-.content
+
+.content.span7
   %h2
-    All pictures
+    = t('application.title')
   %span
-    =paginate @pictures, :window => 2
-  %ul.picture-box
+    = paginate @pictures, :window => 2
+  %ul
     - @pictures.each do |picture|
-      %li
+      %li.picture-box
         %figure.cap-left
           %a{href:picture_path(picture)}
             = image_tag picture.filename.url(:thumb)

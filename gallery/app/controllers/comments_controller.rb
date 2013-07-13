@@ -10,6 +10,7 @@ class CommentsController < ApplicationController
 
 
     if @comment.save
+      Pusher['test-channel'].trigger('test-event',comment: @comment.body.to_json,picture: @comment.picture.id.to_json)
       flash[:notice] = 'Comment was successfully created.'
     else
       flash[:alert] = 'Comment create error.'

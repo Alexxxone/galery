@@ -53,7 +53,10 @@ class CreatePictures < ActiveRecord::Migration
       t.integer :picture_id
       t.integer :category_id
     end
-
+    create_table :user_categories, :id => false do |t|
+      t.integer :user_id
+      t.integer :category_id
+    end
 
 
 
@@ -75,7 +78,12 @@ class CreatePictures < ActiveRecord::Migration
       t.datetime :last_sign_in_at
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
-
+      ##Facebook
+      t.string :provider
+      t.string :uid
+      t.string :name
+      t.string :oauth_token
+      t.datetime :oauth_expires_at
 
       t.timestamps
     end

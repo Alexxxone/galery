@@ -2,16 +2,19 @@ class PicturesController < ApplicationController
   # GET /pictures
   # GET /pictures.json
   before_filter :authenticate_user!,:only => [:edit, :new, :destroy, :create, :update,:like]
-  before_filter :get_categories
+  before_filter :get_last_comments,:get_categories
   def index
-    @test =Rake::Task["ask"].execute
     @pictures = Picture.order(:created_at).page params[:page]
+    session[:return_to] = request.fullpath
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: [@pictures,@test] }
+      format.html
+      format.json { render json: @pictures }
     end
   end
-
+  def search
+    @pictures = Picture.where("title LIKE ?", "%#{params[:picture][:title]}%").order(:created_at).page params[:page]
+    render :index
+  end
   # GET /pictures/1
   # GET /pictures/1.json
   def show
@@ -22,16 +25,19 @@ class PicturesController < ApplicationController
   end
 
   def select
-    categories = Category.find_by_name(params[:id])
-    @pictures = categories.pictures.order(:created_at).page params[:page]
+    category = Category.find_or_initialize_by_name(params[:id])
+   # @pictures = category.pictures
+    @search = category.pictures.search(params[:search])
+    @pictures = @search.result.order(:created_at).page params[:page]
     render :index
   end
 
   def get_categories
     @categories = Category.all
-    @categories.blank? ? @categories=Category.create(:name=>'test') : @categories
   end
-
+  def get_last_comments
+    @last_comments = Comment.last(5).sort_by{|e| -e[:id]}
+  end
   def like
       status =current_user.likes.where(picture_id: params[:pic_id])
       if params[:check]
@@ -45,9 +51,9 @@ class PicturesController < ApplicationController
           json=0.3
         end
       end
-      all_likes = Like.count(params[:pic_id])
+      all_likes = Like.where(:picture_id =>params[:pic_id]).count
       render :json => {:like => json,:all_likes=>all_likes}, layout: false
-    end
+  end
 
 
 

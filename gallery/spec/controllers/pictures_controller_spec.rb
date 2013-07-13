@@ -34,7 +34,7 @@ describe PicturesController do
     it "assigns all pictures as @pictures" do
       picture = Picture.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:pictures).should eq([picture])
+      assigns(:parser).should eq([picture])
     end
   end
 

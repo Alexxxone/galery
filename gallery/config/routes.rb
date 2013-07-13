@@ -1,12 +1,22 @@
 Gallery::Application.routes.draw do
   get 'pictures/select' => 'pictures#select'
+  post 'categories/subscribe' => 'categories#subscribe'
+  post 'categories/check_subscribe' => 'categories#check_subscribe'
+  post 'pictures/' => 'pictures#search'
+
+  get 'auth/:provider/callback', to: 'sessions#create'
+  match 'auth/failure', to: redirect('/')
+  match 'signout', to: 'sessions#destroy', as: 'signout'
+
+  devise_for :users, :controllers => {:registrations => "registrations"}
   root :to => 'pictures#index'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  devise_for :users
+
   ActiveAdmin.routes(self)
 
+  post "/admin/parser/create_picture" => "admin/parser#create_picture"
   resources :categories do
     resources :pictures , only:[:index,:show]
   end

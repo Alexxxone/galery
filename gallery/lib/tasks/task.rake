@@ -1,22 +1,23 @@
 task :user => :environment do
-  puts "Hello!"
+  require 'io/console'
+  puts "please input folder dislocation"
+  puts "default : /home/user3/WORK/faceit/galery/pic_dir"
+  pa = STDIN.gets.chomp
+  Dir.chdir(pa) do |dir|
+    Dir.open(dir)
+    if File.directory?(dir)
+      folder = Dir.glob("*")
+      folder.each do |category|
+        Dir.foreach(category) {| file |
+          if file.length >=3
+            save(file,category)
+          end
+        }
+  end
+ end
 end
-
-
-
-# This is needed because the existing version of directory in Rake
-# is slightly broken, but Jim says it'll be fixed in the next version.
-alias :original_directory :directory
-def directory(dir)
-  original_directory dir
-  Rake::Task[dir]
 end
-
-# Do the directory creation
-namespace :utils do
-  task :create_directories => [
-      directory('public/icons'),
-      directory('public/images'),
-      directory('public/groups'),
-  ]
+def save(file,category)
+  @cat = Category.find_or_create_by_name(:name=>category)
+  @pic = @cat.pictures.create(:title=>file,:filename=>File.open("#{pwd}/#{category}/#{file.to_s}"))
 end

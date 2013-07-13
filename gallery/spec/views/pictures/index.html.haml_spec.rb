@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "pictures/index" do
   before(:each) do
-    assign(:pictures, [
+    assign(:parser, [
       stub_model(Picture,
         :title => "Title",
         :string => "String",

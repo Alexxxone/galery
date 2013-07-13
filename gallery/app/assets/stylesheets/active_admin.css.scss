@@ -8,6 +8,7 @@
 // $sidebar-width: 242px;
 
 // Active Admin's got SASS!
+
 @import "active_admin/mixins";
 @import "active_admin/base";
 
@@ -27,3 +28,17 @@
 // .active_admin       applies to any Active Admin namespace
 // .admin_namespace    applies to the admin namespace (eg: /admin)
 // .other_namespace    applies to a custom namespace named other (eg: /other)
+
+.image_parser_box{
+  display:inline;
+  height:250px;
+  width:325px;
+  float: left;
+}
+html body .image_parser_box img{
+  height:250px;
+  width:250px;
+  float: left;
+  padding-right: 10px;
+
+}

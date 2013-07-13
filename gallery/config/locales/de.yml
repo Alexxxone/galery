@@ -1,0 +1,31 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+de:
+  views:
+    pagination:
+      first: "&laquo; Erste"
+      last: "Letzte &raquo;"
+      previous: "&lsaquo; Früher"
+      next: "Nächste &rsaquo;"
+      truncate: "..."
+  hello: "Gutten tag"
+  simple_captcha:
+    placeholder: "Schreiben Sie, was Sie auf dem Bild sehen"
+  application:
+    title: 'Galerie'
+    welcome: 'Begrüßen Sie zurück :'
+    last_comments: "Neueste Kommentare"
+  buttons:
+    sign_in_facebook: "Einloggen mit Facebook"
+    sign_in: "Einloggen"
+    sign_up: "Registrieren"
+    sign_out: "Ausloggen"
+    home: "Hauptseite"
+    admin_enter: 'Admin eintragen'
+    search: 'Suchen'
+  pictures:
+    placeholder: 'Suche Bild nach Titel ...'
+  comments:
+    posted: 'Geschrieben'
+    sender: 'Absender :'

@@ -2,4 +2,30 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+      truncate: "..."
   hello: "Hello world"
+  simple_captcha:
+    placeholder: "Write from picture"
+  application:
+    title: 'Gallery'
+    welcome: 'Welcome back :'
+    last_comments: "Last comments"
+  buttons:
+    sign_in_facebook: "Sign in with Facebook"
+    sign_in: "Sign in"
+    sign_up: "Sign up"
+    sign_out: "Sign out"
+    home: "Home"
+    admin_enter: 'Admin enter'
+    search: 'Search'
+  pictures:
+    placeholder: 'Search picture by title ...'
+  comments:
+    posted: 'Posted'
+    sender: 'Sender :'

@@ -2,14 +2,36 @@
 %html
   %head
     %title
-      Gallery
+    - t('application.title')
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
 
   %body
-    = @test
-    .row-fluid
-      .offset2
-        = yield
+    .well
+      #user_nav
+        = link_to t('buttons.home'), pictures_path, class: "btn btn-small pull-right"
+        - if current_user
 
+          = current_user.name.blank? ? current_user.email : current_user.name
+          = link_to t('buttons.sign_out'), destroy_user_session_path,:method=>:delete, class: "btn btn-small pull-right"
+        - else
+          .pull-right
+            = link_to t('buttons.sign_in_facebook'), "/auth/facebook", id: "sign_in", class: "btn btn-small"
+            or
+            = link_to(t('buttons.sign_in'), new_user_session_path, class: "btn btn-small")
+            = link_to(t('buttons.sign_up'), new_user_registration_path, class: "btn btn-small")
+
+    .row-fluid.yield_content
+      = yield
+
+      #pusher_result.span4
+        %p
+          = t('application.last_comments')
+        -if !@last_comment.blank?
+          -@last_comments.each do |comment|
+            %p.last_comments
+              =link_to comment.body,picture_path(comment.picture.id)
+
+    .well.footer
+      = link_to(t('buttons.admin_enter'),  new_admin_user_session_path, class: "btn btn-small pull-right")

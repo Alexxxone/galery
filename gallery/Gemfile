@@ -9,12 +9,11 @@ gem 'rails', '3.2.13'
 gem 'devise'
 gem 'activeadmin'
 
-##server
-#gem 'puma'
+gem "state_machine"
 
-#Use pagination
+gem "omniauth-facebook"
+
 gem 'kaminari'
-
 gem 'ransack'
 
 
@@ -48,14 +47,22 @@ gem 'jquery-rails'
 gem 'therubyracer', :platforms => :ruby, :require => 'v8'
 gem 'bootstrap-sass'
 gem "twitter-bootstrap-rails"
-gem 'devise'
 gem 'figaro'
 gem 'haml-rails'
-
+gem 'simple_captcha', :git => 'git://github.com/galetahub/simple-captcha.git'
 gem 'pg'
 gem 'simple_form'
 gem "rmagick", "~> 2.13.2"
 gem 'carrierwave'
+
+gem 'pusher'
+
+
+#parsing
+gem "nokogiri"
+gem "curb"
+
+
 
 
 group :development do
