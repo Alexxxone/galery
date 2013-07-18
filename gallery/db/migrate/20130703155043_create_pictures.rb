@@ -6,9 +6,19 @@ class CreatePictures < ActiveRecord::Migration
 
       t.timestamps
     end
-    create_table :likes, :id => false  do |t|
+    create_table :likes  do |t|
       t.integer :user_id
       t.integer :picture_id
+    end
+
+    create_table :events do |t|
+      t.integer  :eventable_id
+      t.string   :eventable_type
+      t.integer  :user_id
+      t.datetime :created_at
+    end
+    create_table :urls do |t|
+      t.string   :url
     end
 
     create_table(:admin_users) do |t|
@@ -49,11 +59,11 @@ class CreatePictures < ActiveRecord::Migration
       t.string :name
       t.timestamps
     end
-    create_table :picture_categories, :id => false do |t|
+    create_table :picture_categories do |t|
       t.integer :picture_id
       t.integer :category_id
     end
-    create_table :user_categories, :id => false do |t|
+    create_table :user_categories do |t|
       t.integer :user_id
       t.integer :category_id
     end
@@ -84,10 +94,7 @@ class CreatePictures < ActiveRecord::Migration
       t.string :name
       t.string :oauth_token
       t.datetime :oauth_expires_at
-      ##Event
-      t.datetime :like_time
-      t.datetime :cancel_like_time
-      t.datetime :comment_time
+
 
       t.timestamps
     end

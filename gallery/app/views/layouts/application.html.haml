@@ -16,7 +16,7 @@
           = link_to t('buttons.sign_out'), destroy_user_session_path,:method=>:delete, class: "btn btn-small pull-right"
         - else
           .pull-right
-            = link_to t('buttons.sign_in_facebook'), "/auth/facebook", id: "sign_in", class: "btn btn-small"
+            = link_to t('buttons.sign_in_facebook'), '/auth/facebook/', id: "sign_in", class: "btn btn-small"
             or
             = link_to(t('buttons.sign_in'), new_user_session_path, class: "btn btn-small")
             = link_to(t('buttons.sign_up'), new_user_registration_path, class: "btn btn-small")

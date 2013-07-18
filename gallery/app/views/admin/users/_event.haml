@@ -1,0 +1,26 @@
+%table.table.table-hover
+  %caption
+    NAME OF TABLE
+  %thead
+    %tr
+      %th
+        Event
+      %th
+        Object
+      %th
+        Date
+  %tbody
+    - @events.each do |event|
+      %tr
+        %td
+          = event.eventable.class == Url ? "Navigation" : event.eventable.class == Comment ?  truncate(event.eventable.body,length:20, omission: '...(and more)') : 'Liked'
+        %td
+          - if event.eventable.class == Url
+            = link_to event.eventable.url, event.eventable.url
+          - else
+            = image_tag event.eventable.picture.filename_url(:thumb)
+        %td
+          = time_ago_in_words(event.created_at)+" ago"
+
+
+

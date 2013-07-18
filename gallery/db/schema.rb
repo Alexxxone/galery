@@ -45,12 +45,19 @@ ActiveRecord::Schema.define(:version => 20130711154726) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "likes", :id => false, :force => true do |t|
+  create_table "events", :force => true do |t|
+    t.integer  "eventable_id"
+    t.string   "eventable_type"
+    t.integer  "user_id"
+    t.datetime "created_at"
+  end
+
+  create_table "likes", :force => true do |t|
     t.integer "user_id"
     t.integer "picture_id"
   end
 
-  create_table "picture_categories", :id => false, :force => true do |t|
+  create_table "picture_categories", :force => true do |t|
     t.integer "picture_id"
     t.integer "category_id"
   end
@@ -71,7 +78,11 @@ ActiveRecord::Schema.define(:version => 20130711154726) do
 
   add_index "simple_captcha_data", ["key"], :name => "idx_key"
 
-  create_table "user_categories", :id => false, :force => true do |t|
+  create_table "urls", :force => true do |t|
+    t.string "url"
+  end
+
+  create_table "user_categories", :force => true do |t|
     t.integer "user_id"
     t.integer "category_id"
   end
@@ -92,9 +103,6 @@ ActiveRecord::Schema.define(:version => 20130711154726) do
     t.string   "name"
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
-    t.datetime "like_time"
-    t.datetime "cancel_like_time"
-    t.datetime "comment_time"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
   end
