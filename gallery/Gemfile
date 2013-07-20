@@ -9,8 +9,6 @@ gem 'rails', '3.2.13'
 gem 'devise'
 gem 'activeadmin'
 
-gem "state_machine"
-
 gem "omniauth-facebook"
 
 gem 'kaminari'
@@ -74,6 +72,7 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'puma'
+  gem 'thin'
   gem 'rspec-rails'
 end
 

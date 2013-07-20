@@ -1,4 +1,8 @@
+require 'observer'
+include Observable
 ActiveAdmin.register Picture do
+
+
   index do
     selectable_column
     column :title
@@ -34,6 +38,8 @@ ActiveAdmin.register Picture do
         @categories = Category.find(c_id)
         @recipients = User.find(u_id)
         UserMailer.category_email(@recipients,@categories).deliver
+        changed
+        notify_observers(@picture)
       end
     end
   end

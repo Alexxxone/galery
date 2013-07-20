@@ -26,8 +26,5 @@ class SessionsController < Devise::SessionsController
     redirect_to root_path
   end
 
-  private
-  def tracking (type='track_url',data = {:url=>request.url,:user_id=> current_user})
-    ActiveSupport::Notifications.instrument(type,data) if !current_user.nil?
-  end
+
 end

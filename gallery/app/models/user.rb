@@ -19,5 +19,13 @@ class User < ActiveRecord::Base
 
   attr_accessor :current_sign_in_at, :like_time, :cancel_like_time, :comment_time
 
+
+  #RELATIONSHIPS
+  has_many :senders, :class_name => "Message",
+           :foreign_key => :sender_id
+
+  has_many :receivers, :class_name => "Message",
+           :foreign_key => :receiver_id
+  has_many :messages
 end
 

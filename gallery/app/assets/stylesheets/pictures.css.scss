@@ -3,7 +3,46 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 //= require bootstrap
 
-
+.user_chat{
+  height:200px;
+  width:155px;
+  overflow-x: auto;
+  position: absolute;
+  top: 500px;
+  right: 9%;
+  background-color: white;
+  z-index: 99999999;
+}
+.user_chat p:nth-child(even){
+  background-color: lightcyan;
+}
+.user_chat p {
+  cursor:pointer;
+}
+.private_chat{
+  padding:5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: none;
+  height:300px;
+  width:180px;
+  overflow-x: auto;
+  position: absolute;
+  top: 300px;
+  left: 500px;
+  background-color: white;
+  z-index: 999999999;
+}
+.message_text{
+  height:200px;
+  width:180px;
+  overflow-x: auto;
+}
+.private_chat input{
+  position: absolute;
+  bottom: 1px;
+  left:10px;
+}
 a{
   text-decoration:none;
 }

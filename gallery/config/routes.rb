@@ -1,11 +1,12 @@
 Gallery::Application.routes.draw do
   get 'pictures/select' => 'pictures#select'
+  post 'messages/send' => 'messages#create'
 
   post 'categories/subscribe' => 'categories#subscribe'
   post 'categories/check_subscribe' => 'categories#check_subscribe'
   post 'pictures/' => 'pictures#search'
 
-
+  post '/pusher/auth'
 
   devise_for :users, :controllers => {:registrations => "registrations",:sessions=>'sessions'}do
     get '/auth/:provider/callback' =>  'sessions#facebook'
@@ -16,11 +17,12 @@ Gallery::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   post "/admin/parser/create_picture" => "admin/parser#create_picture"
-
+  get '/pictures/select/:id', :to => 'pictures#index', :as => :selected_items
   resources :categories do
     resources :pictures , only:[:index,:show]
   end
   resources :pictures  do
+    get 'page/:page', :action => :select, :on => :collection
     resources :comments , only:[:create,:show]
   end
 

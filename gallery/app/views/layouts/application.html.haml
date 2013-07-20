@@ -27,10 +27,23 @@
       #pusher_result.span4
         %p
           = t('application.last_comments')
-        -if !@last_comment.blank?
-          -@last_comments.each do |comment|
-            %p.last_comments
-              =link_to comment.body,picture_path(comment.picture.id)
-
+          -if !@last_comments.blank?
+            -@last_comments.each do |comment|
+              %p.last_comments
+                =link_to comment.body,picture_path(comment.picture.id)
+      .private_chat
+        %span
+          Interlocutor :
+        .receiver
+        .message_text
+        = text_field_tag "mess",nil, placeholder: 'Write your text here...' , class: 'input-medium'
+        = button_tag "Send", :class => 'btn btn-small sending_message_button'
+      .user_chat.pull-right
+        %p
+          Users online
+          - if @users
+            -@users.each do |user|
+              %p.show_private_chat{id: user.id}
+                = user.email
     .well.footer
       = link_to(t('buttons.admin_enter'),  new_admin_user_session_path, class: "btn btn-small pull-right")

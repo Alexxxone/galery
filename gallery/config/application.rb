@@ -18,7 +18,7 @@ module Gallery
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
     config.autoload_paths += %W(#{config.root}/lib)
-
+    #config.active_record.observers = :pictures_observer
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -40,7 +40,7 @@ module Gallery
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-
+    #config.active_record.observers = :pictures_observer
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
 

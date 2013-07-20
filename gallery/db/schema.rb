@@ -57,6 +57,12 @@ ActiveRecord::Schema.define(:version => 20130711154726) do
     t.integer "picture_id"
   end
 
+  create_table "messages", :force => true do |t|
+    t.string  "text"
+    t.integer "sender_id"
+    t.integer "receiver_id"
+  end
+
   create_table "picture_categories", :force => true do |t|
     t.integer "picture_id"
     t.integer "category_id"
@@ -103,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20130711154726) do
     t.string   "name"
     t.string   "oauth_token"
     t.datetime "oauth_expires_at"
+    t.datetime "last_request_at"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
   end

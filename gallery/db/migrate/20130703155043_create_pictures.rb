@@ -10,6 +10,11 @@ class CreatePictures < ActiveRecord::Migration
       t.integer :user_id
       t.integer :picture_id
     end
+    create_table :messages  do |t|
+      t.string :text
+      t.integer :sender_id
+      t.integer :receiver_id
+    end
 
     create_table :events do |t|
       t.integer  :eventable_id
@@ -94,7 +99,8 @@ class CreatePictures < ActiveRecord::Migration
       t.string :name
       t.string :oauth_token
       t.datetime :oauth_expires_at
-
+      #Online?
+      t.datetime :last_request_at
 
       t.timestamps
     end
