@@ -1,9 +1,5 @@
-task :user => :environment do
-  require 'io/console'
-  puts "please input folder dislocation"
-  puts "default : /home/user3/WORK/faceit/galery/pic_dir"
-  pa = STDIN.gets.chomp
-  Dir.chdir(pa) do |dir|
+task :picture => :environment do
+  Dir.chdir("#{Rails.root}/db/seed/pic_dir") do |dir|
     Dir.open(dir)
     if File.directory?(dir)
       folder = Dir.glob("*")
