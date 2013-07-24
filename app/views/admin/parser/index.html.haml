@@ -1,0 +1,17 @@
+= semantic_form_for :parser do |f|
+  = f.input 'URL'
+  = f.actions
+-if @img
+  %h4 Click on images and category to download
+  = semantic_form_for @img do
+    - @img.split(',').each do |img|
+      .image_parser_box{:style=>"border: 1px solid #666"}
+        -if img.match(/^http*/)
+          =image_tag img, class: "save_img"
+        -else
+          =image_tag "#{@url+img}",src:"#{@url+img}", class: "save_img"
+        %br
+        -@categories.each do |cat|
+          =label_tag cat.name
+          =check_box_tag cat.name, cat.name
+

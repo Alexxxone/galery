@@ -1,0 +1,22 @@
+- cache @picture do
+  .span10
+    %p#notice= notice
+    #show_body.offset2
+      = image_tag "#{@picture.filename.url}"
+      = image_tag "like.png",id: :like, name: @picture.id
+      %span.all_likes
+        all likes :
+        %span
+      %p
+        Title:
+        = @picture.title
+    .span11.offset1
+      = form_for [@picture,Comment.new], :html => {:class => "form-inline"} do |f|
+        .input-append
+          = f.text_area :body, style: "height:40px;width:490px", :placeholder => "Write your comment here"
+          = f.submit "Add comment", class: "btn", style: " height:50px;"
+    .span4.offset1
+      %h2 Comments
+      #comments
+        -@picture.comments.each do |comment|
+          = render :partial => 'comments/comment', :locals => {:comment => comment}
