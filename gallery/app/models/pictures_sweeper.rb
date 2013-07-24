@@ -1,7 +1,7 @@
 class PicturesSweeper < ActionController::Caching::Sweeper #ActiveRecord::Observer
  observe Picture, Comment
  def after_create(picture)
-   expire_page(:controller => "action", :action => %w( index create ))
+   expire_page(:controller => "pictures", :action => %w( index create ))
  end
 
 end

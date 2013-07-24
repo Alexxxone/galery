@@ -70,4 +70,9 @@ class PicturesController < ApplicationController
    end
 
 
+  def chat_messages
+    incomming = Message.where("sender_id IN (?) AND receiver_id IN (?) ",["#{current_user.id}",params[:opponent_id]],[current_user.id,params[:opponent_id]])
+    render json: {:incomming => incomming }
+  end
+
 end   #end Picture Controller

@@ -6,7 +6,9 @@ Gallery::Application.routes.draw do
   post 'categories/check_subscribe' => 'categories#check_subscribe'
   post 'pictures/' => 'pictures#search'
 
-  post '/pusher/auth'
+  get '/pusher/auth' => 'pusher#auth'
+  post '/pictures/chat_messages' => 'pictures#chat_messages'
+  post '/pictures/user' => 'pictures#user'
 
   devise_for :users, :controllers => {:registrations => "registrations",:sessions=>'sessions'}do
     get '/auth/:provider/callback' =>  'sessions#facebook'

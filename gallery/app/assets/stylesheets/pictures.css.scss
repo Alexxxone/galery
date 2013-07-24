@@ -3,6 +3,36 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 //= require bootstrap
 
+.incomming_notification{
+  position: absolute;
+  top: 0px;
+  right: 45%;
+  width: 300px;
+  height: 100px;
+  background-color: rgba(255, 160, 122, 0.61);
+  border: 1px solid #e96142;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 1px 6px 13px rgba(255, 0, 0, 0.34);
+}
+.messages_show_all span{
+  padding-right:50px;
+
+}
+.border{
+  position: absolute;
+  top: 45px;
+  left: 0px;
+  height: 25px;
+  width: 235px;
+  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.66) 53%, rgba(255,255,255,0.63) 58%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(53%,rgba(255,255,255,0.66)), color-stop(58%,rgba(255,255,255,0.63)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+
+}
 .user_chat{
   height:200px;
   width:155px;
@@ -25,23 +55,33 @@
   border-radius: 5px;
   display: none;
   height:300px;
-  width:180px;
+  width:245px;
   overflow-x: auto;
   position: absolute;
   top: 300px;
   left: 500px;
   background-color: white;
   z-index: 999999999;
+  box-shadow: 5px 5px 20px grey;
+}
+
+.receiver,.private_chat span:first-child{
+  cursor:pointer;
 }
 .message_text{
   height:200px;
-  width:180px;
+  width:245px;
   overflow-x: auto;
 }
 .private_chat input{
   position: absolute;
   bottom: 1px;
   left:10px;
+}
+.private_chat button{
+  position: absolute;
+  bottom: 13px;
+  left: 190px;
 }
 a{
   text-decoration:none;
@@ -209,3 +249,52 @@ body .search{
   color: #fff;
 }
 
+//ToolTip
+.ui-tooltip, .arrow:after {
+  background: black;
+  border: 2px solid white;
+}
+.ui-tooltip {
+  width:200px;
+  z-index: 999999999999;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 20px;
+  font: bold 14px "Helvetica Neue", Sans-Serif;
+  text-transform: uppercase;
+  box-shadow: 0 0 7px black;
+}
+.arrow {
+  width: 70px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  margin-left: -35px;
+  bottom: -16px;
+}
+.arrow.top {
+  top: -16px;
+  bottom: auto;
+}
+.arrow.left {
+  left: 20%;
+}
+.arrow:after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: -20px;
+  width: 25px;
+  height: 25px;
+  box-shadow: 6px 5px 9px -9px black;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  tranform: rotate(45deg);
+}
+.arrow.top:after {
+  bottom: -20px;
+  top: auto;
+}

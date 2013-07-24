@@ -11,16 +11,16 @@
       #user_nav
         = link_to t('buttons.home'), pictures_path, class: "btn btn-small pull-right"
         - if current_user
-
-          = current_user.name.blank? ? current_user.email : current_user.name
-          = link_to t('buttons.sign_out'), destroy_user_session_path,:method=>:delete, class: "btn btn-small pull-right"
+          %p{:class =>current_user.id, :id => 'current_user_id'}
+            = current_user.name.blank? ? current_user.email : current_user.name
+            = link_to t('buttons.sign_out'), destroy_user_session_path,:method=>:delete, class: "btn btn-small pull-right"
         - else
           .pull-right
             = link_to t('buttons.sign_in_facebook'), '/auth/facebook/', id: "sign_in", class: "btn btn-small"
             or
             = link_to(t('buttons.sign_in'), new_user_session_path, class: "btn btn-small")
             = link_to(t('buttons.sign_up'), new_user_registration_path, class: "btn btn-small")
-
+      #new_message_notification.pull-left
     .row-fluid.yield_content
       = yield
 
@@ -31,13 +31,14 @@
             -@last_comments.each do |comment|
               %p.last_comments
                 =link_to comment.body,picture_path(comment.picture.id)
-      .private_chat
+      .private_chat#draggable.ui-widget-content
         %span
           Interlocutor :
         .receiver
+        .border
         .message_text
         = text_field_tag "mess",nil, placeholder: 'Write your text here...' , class: 'input-medium'
-        = button_tag "Send", :class => 'btn btn-small sending_message_button'
+        = button_tag "Send",:class => 'btn btn-small sending_message_button pull-right',type: 'button'
       .user_chat.pull-right
         %p
           Users online

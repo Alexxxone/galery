@@ -16,4 +16,3 @@
 #= require pictures
 #= require active_admin
 
-
