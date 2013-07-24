@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   include SimpleCaptcha::ControllerHelpers
   before_filter :set_user_language
-  before_filter  :tracking, :if => :user_signed_in?
+  before_filter  :tracking, :except => [:get_last_comments,:get_categories,:auth, :check_subscribe], :if => :user_signed_in?
   before_filter :set_last_request_at
 
   def set_user_language

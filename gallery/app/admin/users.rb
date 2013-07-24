@@ -14,7 +14,7 @@ ActiveAdmin.register User do
     column "navigation" do  |id|
       link_to "navigation",admin_user_path(id,url:"Url")
     end
-    column "likes" do |id|
+    column :like do |id|
       link_to "likes",admin_user_path(id,url:"Like")
     end
     column "comments" do |id|
@@ -30,7 +30,7 @@ ActiveAdmin.register User do
 
   controller do
     def show
-      @events = Event.find_all_by_user_id_and_eventable_type(params[:id],params[:url])
+      @events = Event.includes(:eventable).find_all_by_user_id_and_eventable_type(params[:id],params[:url])
       render '_event',layout: 'active_admin'
     end
   end

@@ -7,7 +7,7 @@ class PicturesController < ApplicationController
   before_filter :authenticate_user!,:only => [:edit, :new, :destroy, :create, :update,:like]
   before_filter :get_last_comments
 
-  before_filter :tracking, :except => [:like]
+
 
   def index
     @users = User.where(["id != #{current_user.id} AND last_request_at > ?", 5.minutes.ago] ).order("email DESC") if current_user
@@ -45,7 +45,7 @@ class PicturesController < ApplicationController
     @categories = Category.all
   end
   def get_last_comments
-    @last_comments = Comment.last(5).sort_by{|e| -e[:id]}
+    @last_comments = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
   end
   def like
       status =current_user.likes.where(picture_id: params[:pic_id])

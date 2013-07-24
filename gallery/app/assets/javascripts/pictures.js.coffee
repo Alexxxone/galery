@@ -9,15 +9,11 @@
 # при входящем канал будет называтся channel- + sender_id +receiver_id
 
 $(document).ready ->
-  #test of creating a private channel
-  create_chat(22,33)
-
   current_user_id = $('#current_user_id').attr('class')
   Pusher.host = '127.0.0.1'
   Pusher.ws_port = 8080
   Pusher.wss_port = 8080
-  $ ->
-    $("#draggable").draggable({ cancel: ".message_text, .private_chat input" })
+
   $ ->
     $(document).tooltip position:
       my: "center bottom-20"
@@ -26,63 +22,34 @@ $(document).ready ->
         $(this).css position
         $("<div>").addClass("arrow").addClass(feedback.vertical).addClass(feedback.horizontal).appendTo this
 
-  pusher = new Pusher('40c797d047b5b2d43e30', { encrypted: false,authTransport: 'jsonp', authEndpoint: '/pusher/auth'})
-  privatechannel = pusher.subscribe('private-channel')
-  privatechannel.bind "pri-event"+current_user_id,  (response)->
-    if current_user_id != response.user.id
-      $('#new_message_notification').append("<p class='incomming_notification'>New message from :"+response.user.email+"</br>"+response.message+"<p>")
-      $('.incomming_notification').delay(800).slideUp('fast')
-      $(".user_chat #"+response.user.id).click()
-      $('.message_text').append("<p class='messages_show_all'><span>"+response.user.email+"</span>"+response.message.slice(1,-1)+"</p>")
-
-
-# ПЕРЕДЕЛАТЬ НА СОЗДАНИЕ ПРИВАТНОГО ОКНА НА JS APPEND -ом и то что на листочке
-
-# show chat window
-  receiver_id = $(".show_private_chat").click (event)->
-    $('.private_chat').show()
-    $('.receiver').text(event.currentTarget.innerHTML)
-    get_chat_messages(event.currentTarget.id)
-    return event.currentTarget.id
-
-
-
-
-
-
-
-# отправка
-  $('.sending_message_button').click (event6)->
-    $(document).bind("ajaxSend", ->
-      $('.sending_message_button').prop('disabled', true)
-      $('.sending_message_button').html('Wait..')
-      $('.private_chat input').val('')
-    ).bind "ajaxComplete", ->
-      $('.sending_message_button').html('Send')
-      $('.sending_message_button').prop('disabled', false)
-    text =  $('.private_chat input').val()
+  check_like = ->
+    pic_id = $("#like").attr("name")
     $.ajax(
-      url: "messages/send"
+      url: "/pictures/like"
       data:
-        text: text
-        receiver_id: receiver_id['0']['id']
+        check: "check",
+        pic_id: pic_id
       dataType: "json"
       type: "post"
-    )
-    $('.message_text').append("<p class='messages_show_all'><span>Me</span>"+text+"</p>")
+    ).success (response) ->
+      console.log response
+      $("#like").css "opacity", response.like
+      $(".all_likes span").html response.all_likes
 
-    false
-
-
-
-
+  check_subscribe = ->
+    $.ajax(
+      url: "/categories/check_subscribe"
+      dataType: "json"
+      type: "post"
+    ).success (response) ->
+      $(response).each (index,value) ->
+        $('.subscribe[name='+value.category_id+']').attr('src','/assets/subscribed.png')
 
 
   pusher = new Pusher('40c797d047b5b2d43e30', { encrypted: false })
   channel = pusher.subscribe('test-channel')
 
   channel.bind "test-event",  (response)->
-    console.log 'asdasd'
     $('.last_comments:first').before("<p class='last_comments'><a href=' "+response.picture+" '>"+response.comment.slice(1,-1)+"</a></p>")
     $('.last_comments:last').remove()
   check_like()
@@ -117,29 +84,43 @@ $(document).ready ->
       .fail (response) ->
         window.location = "/users/sign_in"
 
-check_like = ->
-  pic_id = $("#like").attr("name")
-  $.ajax(
-    url: "/pictures/like"
-    data:
-      check: "check",
-      pic_id: pic_id
-    dataType: "json"
-    type: "post"
-  ).success (response) ->
-    console.log response
-    $("#like").css "opacity", response.like
-    $(".all_likes span").html response.all_likes
 
-check_subscribe = ->
-  $.ajax(
-    url: "/categories/check_subscribe"
-    dataType: "json"
-    type: "post"
-  ).success (response) ->
-    $(response).each (index,value) ->
-      $('.subscribe[name='+value.category_id+']').attr('src','/assets/subscribed.png')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  pusher = new Pusher('40c797d047b5b2d43e30', { encrypted: false,authTransport: 'jsonp', authEndpoint: '/pusher/auth'})
+  privatechannel = pusher.subscribe('private-channel')
+  privatechannel.bind "pri-event"+current_user_id,  (response)->
+    if current_user_id != response.user.id
+      $('#new_message_notification').append("<p class='incomming_notification'>New message from :"+response.user.email+"</br>"+response.message+"<p>")
+      $('.incomming_notification').delay(800).slideUp('fast')
+      $(".user_chat #"+response.user.id).click()
+      $('.chat_id'+current_user_id+response.user.id).find('.message_text').append("<p class='messages_show_all'><span>"+response.user.email+"</span>"+response.message.slice(1,-1)+"</p>")
+      max = Math.max(current_user_id,response.user.id)
+      min = Math.min(current_user_id,response.user.id)
+      console.log '.chat_id'+min+max
+
+# ПЕРЕДЕЛАТЬ НА СОЗДАНИЕ ПРИВАТНОГО ОКНА НА JS APPEND -ом и то что на листочке
+
+# show chat window
+  $(".show_private_chat").click (event)->
+    create_chat(current_user_id,event.currentTarget.id)
+
+
+                                  # DOCUMENT READY END
 
 
 # Выборка всех сообщений с собеседником
@@ -152,7 +133,7 @@ get_chat_messages = (opponent_id) ->
     type: "post"
   ).success (response) ->
     receiver_email = $('.receiver').text()
-    opponent_id = parseInt( opponent_id, 10 );
+    opponent_id = parseInt( opponent_id, 10 )
     $.each response.incomming, (i, l) ->
       if l.sender_id is opponent_id
         $('.message_text').append("<p class='messages_show_all'><span><a href='#' title='"+receiver_email+"'>Opponent</a></span>"+l.text+"</p>")
@@ -167,17 +148,40 @@ get_chat_messages = (opponent_id) ->
 
 
 
-  #создание приват чата на js
-create_chat = (my_id, opponent_id) ->
+#создание приват чата на js
+create_chat = (current_user_id,opponent_id) ->
+  max = Math.max(current_user_id,opponent_id)
+  min = Math.min(current_user_id,opponent_id)
+  channel_name = ""+min+max
 
-  max =  Math.max(my_id,opponent_id)
-  min =   Math.min(my_id,opponent_id)
+  $('.user_chat').after("<div class ='private_chat ui-widget-content chat_id"+channel_name+"' id='draggable'><span></span>Interlocutor : <div class ='receiver' id='"+opponent_id+"'>"+event.currentTarget.innerHTML+"</div><div class ='border'></div><div class ='message_text'></div><input id='mess' class='input-medium' type='text' placeholder='Write your text here...' name='mess'><button class='btn btn-small sending_message_button pull-right' type='button' name='button' onclick = 'send_message()'>Send</button></div>")
+  $("#draggable").draggable({ cancel: ".message_text, .private_chat input" })
+  get_chat_messages(opponent_id)
 
-  channel_name = "private-channel"+min+max
-  console.log channel_name
+# отправка
+root = exports ? this
+root.send_message = ()->
+  this_chat = $(event.srcElement).parent()
+  text = this_chat.find('input').val()
+  receiver_id = this_chat.find('.receiver').attr('id')
+  $(document).bind("ajaxSend", ->
+    $('.sending_message_button').prop('disabled', true)
+    $('.sending_message_button').html('Wait..')
+    $('.private_chat input').val('')
+  ).bind "ajaxComplete", ->
+    $('.sending_message_button').html('Send')
+    $('.sending_message_button').prop('disabled', false)
+  $.ajax(
+    url: "messages/send"
+    data:
+      text: text
+      receiver_id: receiver_id
+    dataType: "json"
+    type: "post"
+  )
+  this_chat.find('.message_text').append("<p class='messages_show_all'><span>Me</span>"+text+"</p>")
 
-
-
+  false
 
 
 

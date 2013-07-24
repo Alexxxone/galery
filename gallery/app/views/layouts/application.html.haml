@@ -31,14 +31,6 @@
             -@last_comments.each do |comment|
               %p.last_comments
                 =link_to comment.body,picture_path(comment.picture.id)
-      .private_chat#draggable.ui-widget-content
-        %span
-          Interlocutor :
-        .receiver
-        .border
-        .message_text
-        = text_field_tag "mess",nil, placeholder: 'Write your text here...' , class: 'input-medium'
-        = button_tag "Send",:class => 'btn btn-small sending_message_button pull-right',type: 'button'
       .user_chat.pull-right
         %p
           Users online

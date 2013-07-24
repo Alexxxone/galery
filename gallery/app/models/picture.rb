@@ -15,4 +15,9 @@ class Picture < ActiveRecord::Base
             :length => { :minimum => 3,
                          :maximum => 255 }
   paginates_per 5
+
+
+  def controller_name
+    'pictures'
+  end
 end

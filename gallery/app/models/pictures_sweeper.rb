@@ -1,8 +1,12 @@
 class PicturesSweeper < ActionController::Caching::Sweeper #ActiveRecord::Observer
- observe Picture, Comment
- def after_create(picture)
-   expire_page(:controller => "pictures", :action => %w( index create ))
+ observe Picture, Comment ,Category
+ def after_create(object)
+   expire_page(:controller => object.controller_name , :action => %w( index create ))
+   fragment = ActionController::Caching::Fragments.new
+   fragment.expire_fragment('menu')
  end
+
+
 
 end
 
