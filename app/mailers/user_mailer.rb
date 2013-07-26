@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: AdminUser.first.email
+  default from: "emailfaceit@gmail.com"
 
 
   def category_email(recipients,categories)

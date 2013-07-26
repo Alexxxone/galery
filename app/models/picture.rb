@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: pictures
+#
+#  id         :integer          not null, primary key
+#  title      :string(255)
+#  filename   :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Picture < ActiveRecord::Base
 
   attr_accessible :title,:filename,:category_ids
@@ -7,6 +18,7 @@ class Picture < ActiveRecord::Base
   has_many :picture_categories
   has_many :categories,:through => :picture_categories
   has_many :likes,dependent: :destroy
+
   validates :filename,
             :presence => true
 
@@ -20,4 +32,6 @@ class Picture < ActiveRecord::Base
   def controller_name
     'pictures'
   end
+  #test
+  validates_presence_of :title,:filename ,:category_ids
 end

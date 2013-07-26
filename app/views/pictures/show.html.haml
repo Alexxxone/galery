@@ -8,7 +8,7 @@
         all likes :
         %span
       %p
-        Title:
+        = t('comments.title')
         = @picture.title
     .span11.offset1
       = form_for [@picture,Comment.new], :html => {:class => "form-inline"} do |f|

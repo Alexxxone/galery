@@ -1,5 +1,5 @@
 Gallery::Application.routes.draw do
-
+  root :to => 'pictures#index'
   post '/messages/send' => 'messages#create'
 
   post 'categories/subscribe' => 'categories#subscribe'
@@ -13,14 +13,15 @@ Gallery::Application.routes.draw do
 
   get '/pusher/auth' => 'pusher#auth'
   match 'auth/failure', to: redirect('/')
-
-  devise_for :users, :controllers => {:registrations => "registrations",:sessions=>'sessions'}do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
+  devise_for :users, :controllers => {:registrations => "registrations",:sessions=>'sessions'}
+  devise_scope :users do
     get '/auth/:provider/callback' =>  'sessions#facebook'
   end
 
-  root :to => 'pictures#index'
-  devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
+
+
 
   post "/admin/parser/create_picture" => "admin/parser#create_picture"
 

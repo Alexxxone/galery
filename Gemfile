@@ -73,10 +73,9 @@ group :development do
 end
 
 group :development, :test do
-  gem 'factory_girl_rails'
+
   gem 'puma'
   gem 'thin'
-  gem 'rspec-rails'
   gem 'annotate'
 end
 
@@ -85,6 +84,10 @@ group :production do
 end
 
 group :test do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'email_spec'

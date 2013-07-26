@@ -18,7 +18,7 @@ $(document).ready ->
       dataType: "json"
       type: "post"
     ).success (response) ->
-      window.location = "/"
+      window.location.reload()
 #tooltip
   $ ->
     $(document).tooltip position:
@@ -129,7 +129,7 @@ create_chat = (current_user_id,opponent_id,opponent_email) ->
   max = Math.max(current_user_id,opponent_id)
   min = Math.min(current_user_id,opponent_id)
   user_chat = '.chat_id'+min+'i'+max
-  $('.user_chat').after("<div class ='private_chat ui-widget-content chat_id"+min+'i'+max+"' id='draggable'><span class='close_chat' onclick='close_chat(this)'>x</span><span></span>Interlocutor : <div class ='receiver' id='"+opponent_id+"'>"+opponent_email+"</div><div class ='border'></div><div class ='message_text'></div><input id='mess' class='input-medium' type='text' placeholder='Write your text here...' name='mess'><button class='btn btn-small sending_message_button pull-right' type='button' name='button' onclick = 'send_message(this)'>Send</button></div>")
+  $('.user_chat').after("<div class ='private_chat ui-widget-content chat_id"+min+'i'+max+"' id='draggable'><span class='close_chat' onclick='close_chat(this)'>x</span><span></span>Interlocutor : <div class ='receiver' id='"+opponent_id+"'>"+opponent_email+"</div><div class ='border'></div><div class ='message_text'></div><input id='mess' class='input-medium' type='text' placeholder='Write your text here...' name='mess'><button class='btn btn-small sending_message_button pull-right' data-disable-with = 'Please wait ..' type='button' name='button' onclick = 'send_message(this)'>Send</button></div>")
   $("#draggable").draggable({ cancel: ".message_text, .private_chat input" })
   get_chat_messages(opponent_id,user_chat)
 

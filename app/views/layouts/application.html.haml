@@ -34,7 +34,7 @@
                 =link_to comment.body,picture_path(comment.picture.id)
       .user_chat.pull-right
         %p
-          Users online
+          = t('view.users_online')
           - if @users
             -@users.each do |user|
               %p.show_private_chat{id: user.id}

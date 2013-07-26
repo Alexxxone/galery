@@ -3,6 +3,7 @@
 
 en:
   views:
+    users_online: 'Users online :'
     pagination:
       first: "&laquo; First"
       last: "Last &raquo;"
@@ -27,5 +28,7 @@ en:
   pictures:
     placeholder: 'Search picture by title ...'
   comments:
+    title: 'Title :'
     posted: 'Posted'
     sender: 'Sender :'
+    ago: 'ago'
