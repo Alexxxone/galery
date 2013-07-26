@@ -2,15 +2,14 @@ require 'observer'
 include Observable
 ActiveAdmin.register Picture do
 
-
   index do
     selectable_column
-    column :title
+    column admin_user_signed_in?
     column "filename" do |filename|
       image_tag filename.filename.url(:thumb), class: 'my_image_size'
     end
     column :likes do |like|
-      like.likes.count
+      like.likes.length
     end
     default_actions
   end
@@ -26,6 +25,9 @@ ActiveAdmin.register Picture do
   end
 
   controller do
+    def scoped_collection
+       Picture.preload(:likes)
+    end
     def create
       super
       if  @picture.save
@@ -43,6 +45,7 @@ ActiveAdmin.register Picture do
       end
     end
   end
+
 
 
 end

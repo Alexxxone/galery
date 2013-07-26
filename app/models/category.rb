@@ -7,4 +7,8 @@ class Category < ActiveRecord::Base
   has_many :users,:through => :user_categories
   validates :name,
             :presence => true
+
+  def controller_name
+    'categories'
+  end
 end

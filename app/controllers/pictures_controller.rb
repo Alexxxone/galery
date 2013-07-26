@@ -1,33 +1,29 @@
 class PicturesController < ApplicationController
   caches_action :get_categories
-  cache_sweeper :pictures_sweeper, :only => [:index, :create, :get_last_comments ]
-  # GET /pictures
-  # GET /pictures.json
+  cache_sweeper :pictures_sweeper, :only => [:create, :get_last_comments ]
+
   before_filter :get_categories
   before_filter :authenticate_user!,:only => [:edit, :new, :destroy, :create, :update,:like]
   before_filter :get_last_comments
-
-
+  before_filter :set_last_request_at, :if => :user_signed_in?
 
   def index
-    @users = User.where(["id != #{current_user.id} AND last_request_at > ?", 5.minutes.ago] ).order("email DESC") if current_user
+    @users = User.where(["id != #{current_user.id} AND last_request_at > ? ", 5.minutes.ago] ).order("email DESC") if current_user
       @pictures = Picture.order("created_at DESC").page params[:page]
       session[:return_to] = request.fullpath
       respond_to do |format|
         format.html
         format.json { render json: @pictures }
       end
-
   end
+
   def search
     @pictures = Picture.where("title LIKE ?", "%#{params[:picture][:title]}%").order("created_at DESC").page params[:page]
     render :index
   end
 
-  # GET /pictures/1
-  # GET /pictures/1.json
   def show
-    @picture = Picture.find(params[:id])
+    @picture = Picture.preload(:comments => :user).find(params[:id])
     respond_to do |format|
       format.html # show.html.erb
       expire_page(:controller => "action", :action => %w( index create ))
@@ -35,8 +31,8 @@ class PicturesController < ApplicationController
   end
 
   def select
-    category = Category.find_or_initialize_by_name(params[:id])
-    @search = category.pictures.search(params[:search])
+    category = Category.find_or_initialize_by_name(params[:category])
+    @search = category.pictures.search(params[:id])
     @pictures = @search.result.order("created_at DESC").page params[:page]
     render :index
   end
@@ -44,6 +40,7 @@ class PicturesController < ApplicationController
   def get_categories
     @categories = Category.all
   end
+
   def get_last_comments
     @last_comments = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
   end
@@ -69,10 +66,17 @@ class PicturesController < ApplicationController
      render json: {:id => current_user.id }
    end
 
-
   def chat_messages
     incomming = Message.where("sender_id IN (?) AND receiver_id IN (?) ",["#{current_user.id}",params[:opponent_id]],[current_user.id,params[:opponent_id]])
     render json: {:incomming => incomming }
   end
 
+  def set_last_request_at
+    current_user.update_attribute(:last_request_at, Time.now)
+  end
+
+  def select_language
+    session[:language] = params[:language]
+    render :json => {}
+  end
 end   #end Picture Controller

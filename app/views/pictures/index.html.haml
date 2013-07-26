@@ -8,13 +8,13 @@
       - @categories.each do |category|
         %li{id: 'link-'"#{category.name}"}
           = image_tag 'subscribe.png',class:'pull-right subscribe',name:category.id
-          = link_to category.name,selected_items_path(category.name), id: category.name
+          = link_to category.name, "/pictures/category/#{category.name}", id: category.name
 - cache @pictures do
   .content.span7
     %h2
       = t('application.title')
     %span
-      = paginate @pictures, :window => 2
+      = paginate @pictures, :window => 2, :route => :selected_items
     %ul
       - @pictures.each do |picture|
         %li.picture-box

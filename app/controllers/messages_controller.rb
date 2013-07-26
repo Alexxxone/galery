@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
     user = User.where(:id => current_user.id).first
 
     if message.save
-      Pusher["private-channel"].trigger("pri-event#{params[:receiver_id]}",message: message.text.to_json, user: user)
+      Pusher["private-channel"].trigger("#{params[:event_name]}",message: message.text.to_json, user: user,:receiver_id =>params[:receiver_id])
     end
     render json: {}
   end

@@ -3,6 +3,11 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 //= require bootstrap
 
+.close_chat{
+  position:absolute;
+  top:5px;
+  right:5px;
+}
 .incomming_notification{
   position: absolute;
   top: 0px;
@@ -16,7 +21,6 @@
 }
 .messages_show_all span{
   padding-right:50px;
-
 }
 .border{
   position: absolute;
@@ -31,7 +35,6 @@
   background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* IE10+ */
   background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
-
 }
 .user_chat{
   height:200px;
@@ -50,7 +53,7 @@
   cursor:pointer;
 }
 .private_chat{
-  padding:5px;
+  padding:10px;
   border: 1px solid black;
   border-radius: 5px;
   height:300px;
@@ -63,7 +66,6 @@
   z-index: 999999999;
   box-shadow: 5px 5px 20px grey;
 }
-
 .receiver,.private_chat span:first-child{
   cursor:pointer;
 }
@@ -169,7 +171,6 @@ figure:before {
 figure:hover:before {
   opacity: 0;
 }
-
 .cap-left:before {  bottom: 10px; left: 10px; }
 .cap-left figcaption { bottom: 5%; left: -30%; }
 .cap-left:hover figcaption { left: 0; }
@@ -185,8 +186,6 @@ figure:hover:before {
 .cap-bot:before { bottom: 10px; left: 10px; }
 .cap-bot figcaption { left: 0; bottom: -30%;}
 .cap-bot:hover figcaption { bottom: 0; }
-
-
 body .search{
   display: inline;
   width: 300px;

@@ -9,6 +9,7 @@
   %body
     .well
       #user_nav
+        = select_tag "Language", options_for_select(["en","de"]), include_blank: false, :class => 'selectpicker',:id =>'language'
         = link_to t('buttons.home'), pictures_path, class: "btn btn-small pull-right"
         - if current_user
           %p{:class =>current_user.id, :id => 'current_user_id'}

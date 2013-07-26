@@ -77,6 +77,7 @@ group :development, :test do
   gem 'puma'
   gem 'thin'
   gem 'rspec-rails'
+  gem 'annotate'
 end
 
 group :production do
