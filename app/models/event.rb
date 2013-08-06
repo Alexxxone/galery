@@ -10,10 +10,12 @@
 #
 
 class Event < ActiveRecord::Base
-  attr_accessible :eventable_type,:eventable_id,:user_id,:eventable
+
+  attr_accessible :eventable_type, :eventable_id,:user_id, :eventable
 
   belongs_to :eventable, :polymorphic => true
   belongs_to :user
+
   #test
-  validates_presence_of  :eventable_type,:eventable_id,:user_id,:eventable
+  validates_presence_of  :eventable_type, :eventable_id, :user_id, :eventable
 end

@@ -7,27 +7,28 @@ class PicturesController < ApplicationController
   before_filter :get_last_comments
   before_filter :set_last_request_at, :if => :user_signed_in?
 
+
+#  expire_page(:controller => "action", :action => %w( index create ))
+
   def index
     @users = User.where(["id != #{current_user.id} AND last_request_at > ? ", 5.minutes.ago] ).order("email DESC") if current_user
-      @pictures = Picture.order("created_at DESC").page params[:page]
-      session[:return_to] = request.fullpath
-      respond_to do |format|
-        format.html
-        format.json { render json: @pictures }
-      end
-  end
-
-  def search
-    @pictures = Picture.where("title LIKE ?", "%#{params[:picture][:title]}%").order("created_at DESC").page params[:page]
-    render :index
+    @search = Picture.order("created_at DESC").page(params[:page]).search(params[:q])
+    @pictures =  @search.result
+    respond_to do |format|
+      format.html
+      format.json { render json: @pictures }
+    end
   end
 
   def show
-    @picture = Picture.preload(:comments => :user).find(params[:id])
-    respond_to do |format|
-      format.html # show.html.erb
-      expire_page(:controller => "action", :action => %w( index create ))
-    end
+   if Picture.where(id: params[:id]).first
+     @picture = Picture.preload(:comments => :user).where(:id => params[:id]).first
+     respond_to do |format|
+       format.html
+     end
+   else
+      redirect_to root_path, :alert => 'No such picture.'
+   end
   end
 
   def select
@@ -37,15 +38,9 @@ class PicturesController < ApplicationController
     render :index
   end
 
-  def get_categories
-    @categories = Category.all
-  end
 
-  def get_last_comments
-    @last_comments = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
-  end
   def like
-      status =current_user.likes.where(picture_id: params[:pic_id])
+      status =current_user.likes.where(picture_id: params[:pic_id]).first
       if params[:check]
         json=status.blank? ? 0.3 : 1
       else
@@ -67,16 +62,33 @@ class PicturesController < ApplicationController
    end
 
   def chat_messages
-    incomming = Message.where("sender_id IN (?) AND receiver_id IN (?) ",["#{current_user.id}",params[:opponent_id]],[current_user.id,params[:opponent_id]])
-    render json: {:incomming => incomming }
+    @incomming = Message.where("sender_id IN (?) AND receiver_id IN (?) ",["#{current_user.id}",params[:opponent_id]],[current_user.id,params[:opponent_id]])
+    render json: {:incomming => @incomming }
   end
 
+
+
+  def select_language
+    if ['en','de'].include? "#{params[:language]}"
+      session[:language] = params[:language]
+      render :json => {ok: 'ok'}
+    else
+      render :json => {err: 'err'}
+    end
+  end
+
+  private
+  def get_categories
+    @categories = Category.all
+  end
+  private
+  def get_last_comments
+    gon.current_user = current_user.try(:id) || ''
+    @last_comments = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
+  end
+  private
   def set_last_request_at
     current_user.update_attribute(:last_request_at, Time.now)
   end
 
-  def select_language
-    session[:language] = params[:language]
-    render :json => {}
-  end
 end   #end Picture Controller

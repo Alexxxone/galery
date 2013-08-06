@@ -23,138 +23,297 @@ describe PicturesController do
   # This should return the minimal set of attributes required to create a valid
   # Picture. As you add validations to Picture, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "title" => "MyString" } }
+
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # PicturesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all pictures as @pictures" do
-      picture = Picture.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:parser).should eq([picture])
+  context "INDEX action" do
+
+    before :each do
+      @user = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @cat = FactoryGirl.create(:category)
+      @cat.pictures << FactoryGirl.create(:another_picture)
+      @cat2 = FactoryGirl.create(:category)
+      @cat2.pictures << [ FactoryGirl.create(:picture),FactoryGirl.create(:picture)]
+
+    end
+
+    it "all pictures index" do
+      get :index
+      Picture.count.should == 3
+      @cat.pictures.count.should == 1
+      @cat2.pictures.count.should == 2
+      expect(response).to be_success
+      expect(response.status).to eq(200)
+    end
+
+  end #end INDEX action
+
+  describe 'SEARCH action' do
+
+    before :each do
+      FactoryGirl.create(:another_picture)
+      2.times do
+        FactoryGirl.create(:picture)
+      end
+    end
+
+    it "correct search" do
+      post :index ,:q => {:title_cont =>'cat'}
+      pictures = Picture.where("title LIKE ?",'%cat%').order("created_at DESC")
+      expect (pictures.count.should == 2 )
+      expect assigns(:pictures)== pictures
+    end
+    it "incorrect search" do
+      post :index , :q => {:title_cont =>'xxxxx' }
+      pictures = Picture.where("title LIKE ?",'%xxxxx%')
+      pictures.count.should == 0
+      expect (redirect_to root_path)
+    end
+    it "empty search" do
+      post :index, :q => {:title_cont =>'' }
+      pictures = Picture.where("title LIKE ?", '')
+      pictures.count.should == 0
+      expect (get :index)
+    end
+
+  end #end SEARCH action
+
+  describe "SHOW action" do
+    before :each do
+      3.times do
+        @pic = FactoryGirl.create(:picture)
+      end
+    end
+    it "show picture with id = 2 " do
+      expect(@pic.controller_name).to eq("pictures")
+      test_picture =  Picture.find(2)
+      expect (test_picture.id.should == 2 )
+      get :show, :id=> test_picture.id
+      expect(assigns(:picture) == test_picture)
+    end
+    it "picture with wrong id" do
+      get :show, :id => 1000
+      expect(response.status).to eq(302)
+      response.should redirect_to(root_path)
+    end
+
+  end #end SHOW action
+
+
+
+  describe "SELECT action" do
+    before :each do
+      @cat = FactoryGirl.create(:category, :name => 'first')
+      @cat2 = FactoryGirl.create(:category, :name => 'second')
+      2.times do
+       @cat.pictures << FactoryGirl.create(:picture)
+      end
+      2.times do
+        @cat2.pictures << FactoryGirl.create(:another_picture)
+      end
+    end
+
+    it "should show right pictures on selected category" do
+      get :select, :category => 'first'
+      category = Category.find_or_initialize_by_name(:first)
+      search =  category.pictures.search()
+      pictures = search.result.order("created_at DESC")
+      pictures.count.should == 2
+      response.should render_template(:index)
+      expect(assigns(:pictures) == pictures)
+    end
+    it "should show no pictures on wrong category"  do
+      get :select, :category => 'WRONG_CATEGORY'
+      category = Category.find_or_initialize_by_name(:WRONG_CATEGORY)
+      search =  category.pictures.search()
+      pictures_test = search.result.order("created_at DESC")
+      expect(pictures_test.count.should == 0)
+      response.should render_template(:index)
+      expect(assigns(:pictures) == pictures_test)
+    end
+
+  end
+
+    describe "GET_CATEGORIES action" do
+
+      before :each do
+        2.times do |a|
+          @cat2 = FactoryGirl.create(:category, :name => "second#{a}")
+        end
+      end
+      it "get all categories to put to menu" do
+        @controller = PicturesController.new
+        @controller.instance_eval{ get_categories }
+        test_categories = Category.all
+        @controller.instance_eval{ @categories }.should eql(test_categories)
+      end
+
+    end
+
+  describe "GET_LAST_COMMENTS" do
+    before :each do
+      pic =  FactoryGirl.create(:picture,:title => 'last_comment_test')
+      6.times do
+       pic.comments << FactoryGirl.create(:comment)
+      end
+    end
+
+      it "get last 5 comments" do
+        @controller = PicturesController.new
+        @controller.instance_eval{ get_last_comments }
+        last_comments_test = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
+        last_comments_test.count.should == 5
+        last_comments_test.last.id.should == 2
+        last_comments_test.first.id.should == 6
+        last_comments_test.first.picture.title.should == 'last_comment_test'
+        @controller.instance_eval{ @last_comments }.should eql(last_comments_test)
+      end
+
+  end
+
+
+  describe "LIKE action" do
+
+    before :each do
+      @user = FactoryGirl.create(:user)
+      @ano_pic = FactoryGirl.create(:another_picture)
+      @pic = FactoryGirl.create(:picture)
+      FactoryGirl.create(:like, :user_id => @user.id, :picture_id => @pic.id)
+      sign_in @user
+    end
+    it "current user check likes for current picture with exist like" do
+      post :like, :check => 'check', :pic_id => @pic.id
+      should route(:post, 'pictures/like').to(:controller => :pictures, :action => :like)
+      status = @user.likes.where(picture_id: @pic.id).first
+      status.should_not == nil
+    end
+    it "current user check likes for current picture with NOT exist like" do
+      post :like, :check => 'check', :pic_id => @ano_pic.id
+      should route(:post, 'pictures/like').to(:controller => :pictures, :action => :like)
+      status = @user.likes.where(picture_id: @ano_pic.id).first
+      status.should == nil
+    end
+    it "current user set like for current picture" do
+      User.delete_all
+      user = FactoryGirl.create(:user)
+      post :like, :pic_id => @ano_pic.id
+      like = FactoryGirl.create(:like, :user_id => user.id,:picture_id => @ano_pic.id)
+      like.should be_true
+    end
+    it " get all likes" do
+      FactoryGirl.create(:like, :user_id => 10, :picture_id => @pic.id)
+      post :like, :pic_id => @pic.id
+      all_likes = Like.where(:picture_id => @pic.id)
+    end
+    it "current user unset like for current picture" do
+        post :like, :pic_id => @ano_pic.id
+        Like.where(:user_id => @user.id, :picture_id => @pic.id).first.delete
+        like = Like.where(:user_id => @user.id, :picture_id => @pic.id).first
+        like.should == nil
+    end
+    it "guest try to set like for current picture" do
+      sign_out @user
+      post :like, :pic_id => 1
+      response.should redirect_to(new_user_session_path)
+    end
+
+  end #END Like action
+
+  describe "SET_LAST_REQUEST_AT action" do
+    it "should update time of last request" do
+      @user = FactoryGirl.create(:user)
+      sign_in @user
+      time = Time.now
+      @user.update_attribute(:last_request_at, time)
+      @user.last_request_at.should == time
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested picture as @picture" do
-      picture = Picture.create! valid_attributes
-      get :show, {:id => picture.to_param}, valid_session
-      assigns(:picture).should eq(picture)
+  describe "SELECT_LANGUAGE action" do
+
+   before :each do
+      @user = FactoryGirl.create(:user)
+      sign_in @user
+      session[:language] = 'en'
     end
+    it "should change language" do
+      post :select_language, :language => 'de'
+      session[:language].should == 'de'
+    end
+   it "should not change language" do
+     post :select_language, :language => 'WRONG'
+     session[:language].should == 'en'
+   end
+
   end
 
-  describe "GET new" do
-    it "assigns a new picture as @picture" do
-      get :new, {}, valid_session
-      assigns(:picture).should be_a_new(Picture)
-    end
-  end
 
-  describe "GET edit" do
-    it "assigns the requested picture as @picture" do
-      picture = Picture.create! valid_attributes
-      get :edit, {:id => picture.to_param}, valid_session
-      assigns(:picture).should eq(picture)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new Picture" do
-        expect {
-          post :create, {:picture => valid_attributes}, valid_session
-        }.to change(Picture, :count).by(1)
+  describe "chat messages" do
+    before :each do
+      @user = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @user3 = FactoryGirl.create(:user)
+      3.times do
+        FactoryGirl.create(:message, :receiver_id => @user.id, :sender_id => @user2.id)
+        FactoryGirl.create(:message, :receiver_id => @user2.id, :sender_id => @user.id)
       end
-
-      it "assigns a newly created picture as @picture" do
-        post :create, {:picture => valid_attributes}, valid_session
-        assigns(:picture).should be_a(Picture)
-        assigns(:picture).should be_persisted
-      end
-
-      it "redirects to the created picture" do
-        post :create, {:picture => valid_attributes}, valid_session
-        response.should redirect_to(Picture.last)
+      2.times do
+        FactoryGirl.create(:message, :receiver_id => @user3.id, :sender_id => @user.id)
       end
     end
-
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved picture as @picture" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Picture.any_instance.stub(:save).and_return(false)
-        post :create, {:picture => { "title" => "invalid value" }}, valid_session
-        assigns(:picture).should be_a_new(Picture)
-      end
-
-      it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Picture.any_instance.stub(:save).and_return(false)
-        post :create, {:picture => { "title" => "invalid value" }}, valid_session
-        response.should render_template("new")
-      end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested picture" do
-        picture = Picture.create! valid_attributes
-        # Assuming there are no other pictures in the database, this
-        # specifies that the Picture created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Picture.any_instance.should_receive(:update_attributes).with({ "title" => "MyString" })
-        put :update, {:id => picture.to_param, :picture => { "title" => "MyString" }}, valid_session
-      end
-
-      it "assigns the requested picture as @picture" do
-        picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => valid_attributes}, valid_session
-        assigns(:picture).should eq(picture)
-      end
-
-      it "redirects to the picture" do
-        picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => valid_attributes}, valid_session
-        response.should redirect_to(picture)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns the picture as @picture" do
-        picture = Picture.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Picture.any_instance.stub(:save).and_return(false)
-        put :update, {:id => picture.to_param, :picture => { "title" => "invalid value" }}, valid_session
-        assigns(:picture).should eq(picture)
-      end
-
-      it "re-renders the 'edit' template" do
-        picture = Picture.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Picture.any_instance.stub(:save).and_return(false)
-        put :update, {:id => picture.to_param, :picture => { "title" => "invalid value" }}, valid_session
-        response.should render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE destroy" do
-    it "destroys the requested picture" do
-      picture = Picture.create! valid_attributes
-      expect {
-        delete :destroy, {:id => picture.to_param}, valid_session
-      }.to change(Picture, :count).by(-1)
-    end
-
-    it "redirects to the pictures list" do
-      picture = Picture.create! valid_attributes
-      delete :destroy, {:id => picture.to_param}, valid_session
-      response.should redirect_to(pictures_url)
+    it "asd" do
+      sign_in @user
+      post :chat_messages, :opponent_id => @user2.id
+      incoming = Message.where("sender_id IN (?) AND receiver_id IN (?)",["#{@user.id}", "#{@user2.id}"],["#{@user.id}", "#{@user2.id}"])
+      expect(assigns(:incomming)== incoming)
+      incoming.count.should == 6
     end
   end
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

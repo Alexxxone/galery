@@ -11,14 +11,18 @@
 #
 
 class Comment < ActiveRecord::Base
-  attr_accessible :body,:image_id,:user_id
+  attr_accessible :body,:picture_id,:user_id
 
   belongs_to :picture, :touch => true
   belongs_to :user
   has_many :events, as: :eventable
+  validates :body,
+            :presence => true,
+            :length => { :minimum => 3,
+                         :maximum => 200 }
   def controller_name
     'comments'
   end
   #test
-  validates_presence_of :body,:image_id,:user_id
+  validates_presence_of :body,:picture_id,:user_id
 end

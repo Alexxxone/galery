@@ -33,5 +33,5 @@ class Picture < ActiveRecord::Base
     'pictures'
   end
   #test
-  validates_presence_of :title,:filename ,:category_ids
+  validates_presence_of :title,:filename
 end

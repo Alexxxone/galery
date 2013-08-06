@@ -2,12 +2,12 @@ class SessionsController < Devise::SessionsController
 
   def create
     super
-    tracking("sessions.create", {:user_id=> current_user.id} )
+    tracking("sessions.create", { :user_id => current_user.id } )
   end
 
   def destroy
     super
-    tracking("sessions.destroy", {:user_id=> current_user.id} )
+    tracking("sessions.destroy", { :user_id => current_user.id } )
   end
 
   def facebook

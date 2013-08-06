@@ -1,8 +1,10 @@
 - cache "menu" do
   .search.pull-right
-    = form_for Picture.new, :url => pictures_path do |f|
-      = f.text_field :title, placeholder: t('pictures.placeholder')
-      = f.submit value: t('buttons.search'),class: 'btn'
+    .field
+      = search_form_for @search, url: search_pictures_path, method: :post do |f|
+        = f.text_field :title_cont
+        .actions
+          = f.submit "Search"
   #header.span4
     %ul#navigation
       - @categories.each do |category|
@@ -10,11 +12,15 @@
           = image_tag 'subscribe.png',class:'pull-right subscribe',name:category.id
           = link_to category.name, "/pictures/category/#{category.name}", id: category.name
 - cache @pictures do
-  .content.span7
+  .content.span6
     %h2
-      = t('application.title')
+      = link_to t('application.title'),root_path
+    %span.sorting_links
+      = sort_link @search, :title, "Title"
+      = sort_link @search, :created_at, "Release Date"
+      = sort_link @search, :filename, "Name"
     %span
-      = paginate @pictures, :window => 2, :route => :selected_items
+      = paginate @pictures, :window => 2, :params => { _: nil, _method: nil, authenticity_token: nil, commit: nil, utf8: nil}
     %ul
       - @pictures.each do |picture|
         %li.picture-box

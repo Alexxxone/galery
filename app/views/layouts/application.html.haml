@@ -2,7 +2,8 @@
 %html
   %head
     %title
-    - t('application.title')
+      = t('application.title')
+    = include_gon
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
     = csrf_meta_tags
@@ -19,9 +20,15 @@
           .pull-right
             = link_to t('buttons.sign_in_facebook'), '/auth/facebook/', id: "sign_in", class: "btn btn-small"
             or
-            = link_to(t('buttons.sign_in'), new_user_session_path, class: "btn btn-small")
+            = link_to(t('buttons.sign_in'), user_session_path, class: "btn btn-small")
             = link_to(t('buttons.sign_up'), new_user_registration_path, class: "btn btn-small")
       #new_message_notification.pull-left
+    -if flash[:notice]
+      .notice
+        = flash[:notice]
+    - if alert
+      .alert
+        = alert
     .row-fluid.yield_content
       = yield
 
@@ -34,10 +41,10 @@
                 =link_to comment.body,picture_path(comment.picture.id)
       .user_chat.pull-right
         %p
-          = t('view.users_online')
-          - if @users
-            -@users.each do |user|
-              %p.show_private_chat{id: user.id}
-                = user.email
+          = t('views.users_online')
+        - if @users
+          -@users.each do |user|
+            %p.show_private_chat{id: user.id}
+              = user.email
     .well.footer
       = link_to(t('buttons.admin_enter'),  new_admin_user_session_path, class: "btn btn-small pull-right")

@@ -1,6 +1,15 @@
 #!/usr/bin/env ruby
 # This command will automatically be run when you run "rails" with Rails 3 gems installed from the root of your application.
 
+#file:///home/user3/WORK/faceit/galery/coverage/index.html#_AllFiles
+#  поправить в нормальный путь
+#for checking test coverage ->
+  require 'simplecov'
+  SimpleCov.start 'rails'
+  SimpleCov.root("/coverage")
+  puts "required simplecov"
+#<-
+
 APP_PATH = File.expand_path('../../config/application',  __FILE__)
 require File.expand_path('../../config/boot',  __FILE__)
 require 'rails/commands'

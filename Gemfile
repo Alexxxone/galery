@@ -14,6 +14,8 @@ gem "omniauth-facebook"
 gem 'kaminari'
 gem 'ransack'
 
+gem 'gon'
+gem 'rabl-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -73,7 +75,8 @@ group :development do
 end
 
 group :development, :test do
-
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
   gem 'puma'
   gem 'thin'
   gem 'annotate'
@@ -84,11 +87,11 @@ group :production do
 end
 
 group :test do
-  gem 'factory_girl_rails'
-  gem 'rspec-rails'
+  gem 'simplecov', :require => false
   gem 'shoulda-matchers'
   gem 'database_cleaner'
   gem 'capybara'
+  gem "selenium-webdriver"
   gem 'database_cleaner'
   gem 'email_spec'
 end

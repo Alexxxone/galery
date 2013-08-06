@@ -3,11 +3,21 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $(document).ready ->
-  if  document.getElementById('current_user_id')
-    current_user_id = document.getElementById('current_user_id').getAttribute('class')
+  current_user_id = gon.current_user || ''
   Pusher.host = '127.0.0.1'
   Pusher.ws_port = 8080
   Pusher.wss_port = 8080
+
+  $('form').on 'click', '.remove_fields', (event) ->
+    $(this).closest('.field').remove()
+    event.preventDefault()
+
+  $('form').on 'click', '.add_fields', (event) ->
+    time = new Date().getTime()
+    regexp = new RegExp($(this).data('id'), 'g')
+    $(this).before($(this).data('fields').replace(regexp, time))
+    event.preventDefault()
+
 #change language
   $("#language").click (event)->
     language = $(event.currentTarget).find('option:selected').val()
@@ -18,7 +28,10 @@ $(document).ready ->
       dataType: "json"
       type: "post"
     ).success (response) ->
-      window.location.reload()
+      if response.ok
+        window.location.reload()
+      else
+        window.location = ('/')
 #tooltip
   $ ->
     $(document).tooltip position:
@@ -38,7 +51,6 @@ $(document).ready ->
       dataType: "json"
       type: "post"
     ).success (response) ->
-      console.log response
       $("#like").css "opacity", response.like
       $(".all_likes span").html response.all_likes
 #check subcribed categories
@@ -98,25 +110,29 @@ $(document).ready ->
   privatechannel = pusher.subscribe('private-channel')
   $(all_user_id).each (ind,val) ->
     privatechannel.bind "pri-event"+val,  (response)->
-      if current_user_id == response.receiver_id
+      if parseInt(current_user_id) == parseInt(response.receiver_id)
+
         $('#new_message_notification').append("<p class='incomming_notification'>New message from :"+response.user.email+"</br>"+response.message+"<p>")
         $('.incomming_notification').delay(1800).slideUp('fast')
-
-        max = Math.max(current_user_id,response.user.id)
-        min = Math.min(current_user_id,response.user.id)
-        user_chat = $('.chat_id'+min+'i'+max)
+        a = [parseInt(current_user_id),parseInt(response.user.id)]
+        a.sort (a, b) ->
+          a - b
+        min_max = a.join('i')
+        user_chat = $('.chat_id'+min_max)
         if user_chat.length
           if user_chat.is(':hidden')
             user_chat.show()
           user_chat.find('.message_text').append("<p class='messages_show_all'><span><a href='#' title='"+response.user.email+"'>Opponent</a></span>"+response.message.slice(1,-1)+"</p>")
         else
           $(".show_private_chat##{response.user.id}").click()
-          $('.chat_id'+min+'i'+max).find('.message_text').append("<p class='messages_show_all'><span>"+response.user.email+"</span>"+response.message.slice(1,-1)+"</p>")
+          $('.chat_id'+min_max).find('.message_text').append("<p class='messages_show_all'><span>"+response.user.email+"</span>"+response.message.slice(1,-1)+"</p>")
 #show chat window
   $(".show_private_chat").click (event)->
-    max = Math.max(current_user_id,event.currentTarget.id)
-    min = Math.min(current_user_id,event.currentTarget.id)
-    user_chat = $('.chat_id'+min+'i'+max)
+    a = [current_user_id,event.currentTarget.id]
+    a.sort (a, b) ->
+      a - b
+    min_max = a.join('i')
+    user_chat = $('.chat_id'+min_max)
     if user_chat.length
       user_chat.show()
     else
@@ -135,7 +151,6 @@ create_chat = (current_user_id,opponent_id,opponent_email) ->
 
 # Get all messages with you and current opponent
 get_chat_messages = (opponent_id,user_chat) ->
-  console.log user_chat
   $.ajax(
     url: "/pictures/chat_messages"
     data:
@@ -160,29 +175,30 @@ get_chat_messages = (opponent_id,user_chat) ->
 @send_message = (context)->
   this_chat = $(context).parent()
   text = this_chat.find('input').val()
-  opponent_id = this_chat.find('.receiver').attr('id')
-  current_user_id = document.getElementById('current_user_id').getAttribute('class')
-  max = Math.max(current_user_id,opponent_id)
-  min = Math.min(current_user_id,opponent_id)
-  event_name = 'pri-event'+min+'i'+max
-  $(document).bind("ajaxSend", ->
-    $(context).prop('disabled', true)
-    $(context).html('Wait..')
-    $(context).val('')
-  ).bind "ajaxComplete", ->
-    $(context).html('Send')
-    $(context).prop('disabled', false)
-  $.ajax(
-    url: "/messages/send"
-    data:
-      text: text
-      receiver_id: opponent_id
-      event_name: event_name
-    dataType: "json"
-    type: "post"
-  )
-  this_chat.find('.message_text').append("<p class='messages_show_all'><span>Me</span>"+text+"</p>")
-  false
+  if text.length >= 1
+    opponent_id = this_chat.find('.receiver').attr('id')
+    current_user_id = document.getElementById('current_user_id').getAttribute('class')
+    max = Math.max(current_user_id,opponent_id)
+    min = Math.min(current_user_id,opponent_id)
+    event_name = 'pri-event'+min+'i'+max
+    $(document).bind("ajaxSend", ->
+      this_chat.find('button').prop('disabled', true)
+      this_chat.find('button').html('Wait..')
+      this_chat.find('input').val('')
+    ).bind "ajaxComplete", ->
+      this_chat.find('button').html('Send')
+      this_chat.find('button').prop('disabled', false)
+    $.ajax(
+      url: "/messages/send"
+      data:
+        text: text
+        receiver_id: opponent_id
+        event_name: event_name
+      dataType: "json"
+      type: "post"
+    )
+    this_chat.find('.message_text').append("<p class='messages_show_all'><span>Me</span>"+text+"</p>")
+    false
 
 #close chat window
 @close_chat =(context) ->
