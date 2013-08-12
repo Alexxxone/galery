@@ -1,22 +1,30 @@
 - cache @picture do
+  = render :partial => 'last_comments'
+  - if !@users.blank?
+    = render :partial => 'online_users'
   .span10
-    %p#notice= notice
     #show_body.offset2
       = image_tag "#{@picture.filename.url}"
       = image_tag "like.png",id: :like, name: @picture.id
       %span.all_likes
         all likes :
         %span
+          = @picture.likes.length
       %p
         = t('comments.title')
         = @picture.title
     .span11.offset1
-      = form_for [@picture,Comment.new], :html => {:class => "form-inline"} do |f|
+      = form_for [@picture,Comment.new], :html => {:class => "form-inline"}, :remote => true do |f|
         .input-append
           = f.text_area :body, style: "height:40px;width:490px", :placeholder => "Write your comment here"
           = f.submit "Add comment", class: "btn", style: " height:50px;"
     .span4.offset1
-      %h2 Comments
-      #comments
-        -@picture.comments.each do |comment|
-          = render :partial => 'comments/comment', :locals => {:comment => comment}
+      #com
+      %table#comments
+        %thead
+          %tr
+            %th
+        %tbody.page
+          = render :partial => 'comments/comment'
+      = paginate @comments
+

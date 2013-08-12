@@ -1,14 +1,11 @@
 require 'spec_helper'
 
-
 describe CommentsController do
-
   context "SUBSCRIBE AND CHECK_SUBSCRIBE action" do
     before :each do
-      @pic = FactoryGirl.create(:picture)
+      @pic = FactoryGirl.create(:show)
       @user = FactoryGirl.create(:user)
     end
-
     it "logged user create comment" do
       sign_in @user
       post :create, :picture_id => @pic.id, :comment => { :body => 'New comment' }
@@ -28,23 +25,5 @@ describe CommentsController do
       expect (redirect_to picture_path(@pic))
       flash[:alert].should == 'Comment create error.'
     end
-  #def create
-  #  @picture = Picture.find(params[:picture_id])
-  #  @comment = current_user.comments.new(params[:comment])
-  #  @comment.picture_id=@picture.id
-  #
-  #
-  #  if @comment.save
-  #    tracking('comments.create', {:comment => @comment,:user_id=>current_user.id} )
-  #
-  #    Pusher['test-channel'].trigger('test-event',comment: @comment.body.to_json,picture: @comment.picture.id.to_json)
-  #    flash[:notice] = 'Comment was successfully created.'
-  #  else
-  #    flash[:alert] = 'Comment create error.'
-  #  end
-  #  redirect_to picture_path(@picture)
-  #end
-
-
-end
+  end
 end

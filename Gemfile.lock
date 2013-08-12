@@ -138,6 +138,8 @@ GEM
       ruby_parser (~> 3.1.1)
     httpauth (0.2.0)
     i18n (0.6.1)
+    i18n-js (2.1.2)
+      i18n
     inherited_resources (1.4.0)
       has_scope (~> 0.5.0)
       responders (~> 0.9)
@@ -334,11 +336,13 @@ DEPENDENCIES
   gon
   haml-rails
   html2haml
+  i18n-js
   jquery-rails
   jquery-ui-rails
   kaminari
   libv8 (~> 3.11.8)
   nokogiri
+  omniauth
   omniauth-facebook
   pg
   puma

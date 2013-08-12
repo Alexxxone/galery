@@ -10,12 +10,11 @@
   %body
     .well
       #user_nav
-        = select_tag "Language", options_for_select(["en","de"]), include_blank: false, :class => 'selectpicker',:id =>'language'
+        = select_tag "Language", options_for_select(["en","de"], session[:language].blank? ? 'en' : session[:language]), include_blank: false, :class => 'selectpicker',:id =>'language'
         = link_to t('buttons.home'), pictures_path, class: "btn btn-small pull-right"
         - if current_user
-          %p{:class =>current_user.id, :id => 'current_user_id'}
-            = current_user.name.blank? ? current_user.email : current_user.name
-            = link_to t('buttons.sign_out'), destroy_user_session_path,:method=>:delete, class: "btn btn-small pull-right"
+          = current_user.try(:name) || current_user.email
+          = link_to t('buttons.sign_out'), destroy_user_session_path,:method=>:delete, class: "btn btn-small pull-right"
         - else
           .pull-right
             = link_to t('buttons.sign_in_facebook'), '/auth/facebook/', id: "sign_in", class: "btn btn-small"
@@ -23,7 +22,7 @@
             = link_to(t('buttons.sign_in'), user_session_path, class: "btn btn-small")
             = link_to(t('buttons.sign_up'), new_user_registration_path, class: "btn btn-small")
       #new_message_notification.pull-left
-    -if flash[:notice]
+    - if flash[:notice]
       .notice
         = flash[:notice]
     - if alert
@@ -31,20 +30,5 @@
         = alert
     .row-fluid.yield_content
       = yield
-
-      #pusher_result.span4
-        %p
-          = t('application.last_comments')
-          -if !@last_comments.blank?
-            -@last_comments.each do |comment|
-              %p.last_comments
-                =link_to comment.body,picture_path(comment.picture.id)
-      .user_chat.pull-right
-        %p
-          = t('views.users_online')
-        - if @users
-          -@users.each do |user|
-            %p.show_private_chat{id: user.id}
-              = user.email
     .well.footer
       = link_to(t('buttons.admin_enter'),  new_admin_user_session_path, class: "btn btn-small pull-right")

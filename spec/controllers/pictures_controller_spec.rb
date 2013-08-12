@@ -38,7 +38,7 @@ describe PicturesController do
       @cat = FactoryGirl.create(:category)
       @cat.pictures << FactoryGirl.create(:another_picture)
       @cat2 = FactoryGirl.create(:category)
-      @cat2.pictures << [ FactoryGirl.create(:picture),FactoryGirl.create(:picture)]
+      @cat2.pictures << [ FactoryGirl.create(:show),FactoryGirl.create(:show)]
 
     end
 
@@ -58,7 +58,7 @@ describe PicturesController do
     before :each do
       FactoryGirl.create(:another_picture)
       2.times do
-        FactoryGirl.create(:picture)
+        FactoryGirl.create(:show)
       end
     end
 
@@ -86,7 +86,7 @@ describe PicturesController do
   describe "SHOW action" do
     before :each do
       3.times do
-        @pic = FactoryGirl.create(:picture)
+        @pic = FactoryGirl.create(:show)
       end
     end
     it "show picture with id = 2 " do
@@ -94,7 +94,7 @@ describe PicturesController do
       test_picture =  Picture.find(2)
       expect (test_picture.id.should == 2 )
       get :show, :id=> test_picture.id
-      expect(assigns(:picture) == test_picture)
+      expect(assigns(:show) == test_picture)
     end
     it "picture with wrong id" do
       get :show, :id => 1000
@@ -111,7 +111,7 @@ describe PicturesController do
       @cat = FactoryGirl.create(:category, :name => 'first')
       @cat2 = FactoryGirl.create(:category, :name => 'second')
       2.times do
-       @cat.pictures << FactoryGirl.create(:picture)
+       @cat.pictures << FactoryGirl.create(:show)
       end
       2.times do
         @cat2.pictures << FactoryGirl.create(:another_picture)
@@ -157,7 +157,7 @@ describe PicturesController do
 
   describe "GET_LAST_COMMENTS" do
     before :each do
-      pic =  FactoryGirl.create(:picture,:title => 'last_comment_test')
+      pic =  FactoryGirl.create(:show,:title => 'last_comment_test')
       6.times do
        pic.comments << FactoryGirl.create(:comment)
       end
@@ -170,7 +170,7 @@ describe PicturesController do
         last_comments_test.count.should == 5
         last_comments_test.last.id.should == 2
         last_comments_test.first.id.should == 6
-        last_comments_test.first.picture.title.should == 'last_comment_test'
+        last_comments_test.first.show.title.should == 'last_comment_test'
         @controller.instance_eval{ @last_comments }.should eql(last_comments_test)
       end
 
@@ -182,7 +182,7 @@ describe PicturesController do
     before :each do
       @user = FactoryGirl.create(:user)
       @ano_pic = FactoryGirl.create(:another_picture)
-      @pic = FactoryGirl.create(:picture)
+      @pic = FactoryGirl.create(:show)
       FactoryGirl.create(:like, :user_id => @user.id, :picture_id => @pic.id)
       sign_in @user
     end

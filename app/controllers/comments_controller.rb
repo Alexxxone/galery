@@ -10,14 +10,14 @@ class CommentsController < ApplicationController
 
 
     if @comment.save
+      #@comments = Comment.preload([:user,:picture]).where(:picture_id=>@picture.id).order('created_at DESC').page(params[:page])
+      sender_email = @comment.user.email
       tracking('comments.create', {:comment => @comment,:user_id=>current_user.id} )
-
-      Pusher['test-channel'].trigger('test-event',comment: @comment.body.to_json,picture: @comment.picture.id.to_json)
-      flash[:notice] = 'Comment was successfully created.'
-    else
-      flash[:alert] = 'Comment create error.'
+      Pusher['test-channel'].trigger('test-event',comment: @comment,:sender_email => sender_email)
     end
-    redirect_to picture_path(@picture)
+    respond_to do |format|
+      format.js
+    end
   end
 
 end

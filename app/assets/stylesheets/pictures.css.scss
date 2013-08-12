@@ -2,12 +2,52 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 //= require bootstrap
-
 @font-face {
   font-family: 'Quicksand';
   src: url('a-song-for-jennifer-bold.ttf');
   font-weight: normal;
   font-style: normal;
+}
+
+$light_text: lightcyan;
+$cyan_text: cyan - 100;
+
+#comments{
+  color:$light_text;
+  p{
+    color:$cyan_text;
+  }
+}
+h6{
+  color:$light_text;
+}
+#pusher_result{
+  background-color: $light_text;
+  padding: 10px;
+  right: 2%;
+  top: 33%;
+  position: absolute;
+  width:19%;
+}
+#pusher_result .last_comments{
+  border-bottom: 1px solid black;
+  a{
+    color:$cyan_text;
+    &:hover {margin-left:+10px; }
+  }
+}
+.user_chat{
+  @extend #pusher_result;
+  overflow-x: auto;
+  top: 70%;
+  .show_private_chat{
+    border-bottom: 1px solid black;
+    cursor:pointer;
+      span{
+        color:$cyan_text;
+        &:hover {margin-left:+10px; }
+      }
+  }
 }
 
 .picture-box .cap-left{
@@ -53,22 +93,7 @@
   background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
 }
-.user_chat{
-  max-height:200px;
-  width:155px;
-  overflow-x: auto;
-  position: absolute;
-  top: 500px;
-  right: 9%;
-  background-color: white;
-  z-index: 99999999;
-}
-.user_chat p:nth-child(even){
-  background-color: lightcyan;
-}
-.user_chat p {
-  cursor:pointer;
-}
+
 .private_chat{
   padding:10px;
   border: 1px solid black;
@@ -110,7 +135,7 @@ a:hover{
 }
 .all_likes{
   padding:2px;
-  background-color: lightcyan;
+  background-color: $light_text;
   color:grey;
   position: relative;
   top: -40px;
@@ -321,4 +346,20 @@ body .content h2{
 .arrow.top:after {
   bottom: -20px;
   top: auto;
+
+}
+.comment{
+  border-left:5px solid white;
+  color:white;
+    td{
+      padding-bottom: 15px;
+      padding-left: 15px;
+      display: inline-block;
+      color:$cyan_text;
+      width:600px;
+      word-wrap: break-word;
+    }
+    h6{
+      padding-left: 5px;
+    }
 }

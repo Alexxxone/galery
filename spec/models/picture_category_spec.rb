@@ -20,7 +20,7 @@ describe PictureCategory do
     it { should validate_presence_of(:picture_id) }
     it { should validate_presence_of(:category_id) }
 
-    it { should belong_to(:picture) }
+    it { should belong_to(:show) }
     it { should belong_to(:category) }
 
 end

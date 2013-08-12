@@ -8,99 +8,141 @@ describe 'Picture', :type => :feature, :js=>true do
   before :each do
     Warden.test_mode!
     @user = FactoryGirl.create(:user,:email => 'one@mail.ru' ,:password => '12345678',:password_confirmation =>'12345678')
-    @user2 = FactoryGirl.create(:user)
+    @user2 = FactoryGirl.create(:user,:email => 'two@mail.ru' ,:password => '12345678',:password_confirmation =>'12345678')
     @cat = FactoryGirl.create(:category)
     @cat.pictures << FactoryGirl.create(:another_picture)
     @cat2 = FactoryGirl.create(:category)
-    @cat2.pictures << [ FactoryGirl.create(:picture),FactoryGirl.create(:picture)]
+    @cat2.pictures << [ FactoryGirl.create(:show),FactoryGirl.create(:show)]
     @cat3 = FactoryGirl.create(:category)
     8.times do
-      @cat3.pictures << FactoryGirl.create(:picture)
+      @cat3.pictures << FactoryGirl.create(:show)
     end
     FactoryGirl.create(:comment,:user_id => @user.id, :picture_id => 1, :body => "My comment2")
     @comment =  FactoryGirl.create(:comment,:user_id => @user.id, :picture_id => 1, :body => "My comment1")
     FactoryGirl.create(:comment,:user_id => @user.id, :picture_id => 2)
     FactoryGirl.create(:comment,:user_id => @user2.id, :picture_id => 2)
     FactoryGirl.create(:comment,:user_id => @user2.id, :picture_id => 1)
-
-    puts Category.all.pretty_inspect
-    puts Picture.all.pretty_inspect
-
   end
 
   context 'Main page' do
 
-    #it "index and change language" do
-    #  visit '/pictures'
-    #  page.should have_link('Home', :href => '/pictures')
-    #  select('de', :from => 'Language')
-    #  page.has_content?('Neueste Kommentare')
-    #  current_path.should == '/pictures'
-    #  number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
-    #  number_of_columns.length.should == 5
-    #  within '#navigation' do
-    #    find(:xpath, "//a[@href='/pictures/category/tit1']").click
-    #  end
-    #  current_path.should == '/pictures/category/tit1'
-    #  number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
-    #  number_of_columns.length.should == 1
-    #  within '#navigation' do
-    #    find(:xpath, "//a[@href='/pictures/category/tit2']").click
-    #  end
-    #  current_path.should == '/pictures/category/tit2'
-    #  number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
-    #  number_of_columns.length.should == 2
-    #  find(:xpath, "//a[@href='/pictures']").click
-    #  within ('.pagination') do
-    #   first(:css, "a[href='/pictures/page/3']").click
-    #  end
-    #  current_path.should == '/pictures/page/3'
-    #  number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
-    #  number_of_columns.length.should == 1
-    #  page.has_content?('Neueste Kommentare')
-    #  number_of_columns = page.all(:xpath, "//p[@class='last_comments']")
-    #  number_of_columns.length.should == 5
-    #  within ('#pusher_result') do
-    #    first(:css, "p[class='last_comments'] a").click
-    #  end
-    #  current_path.should == "/pictures/1"
-    #  page.should have_content('My comment2','My comment1')
-    #  fill_in 'comment[body]', :with=> 'new comment about big big tits'
-    #  click_button ('Add comment')
-    #  current_path.should == "/users/sign_in"
-    #  page.should have_content('You need to sign in or sign up before continuing.')
-    #  fill_in 'user[email]', :with => 'one@mail.ru'
-    #  fill_in 'user[password]', :with => '12345678'
-    #  click_button('Sign in')
-    #  current_path.should == '/'
-    #  page.has_content?('Neueste Kommentare','Galerie')
-    #  first(:css, ".picture-box .cap-left a img").click
-    #  current_path.should == '/pictures/11'
-    #  fill_in 'comment[body]', :with=> 'new comment about big big tits'
-    #  click_button ('Add comment')
-    #  current_path.should == '/pictures/11'
-    #  page.should have_content('new comment about big big tits','one@mail.ru')
-
-
-      in_browser('man') do
-        visit '/'
+    it "index and change language" do
+      in_browser('one') do
+        visit '/pictures'
+        page.should have_link('Home', :href => '/pictures')
+        select('de', :from => 'Language')
+        page.has_content?('Neueste Kommentare')
+        current_path.should == '/pictures'
+        number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
+        number_of_columns.length.should == 5
+        within '#navigation' do
+          find(:xpath, "//a[@href='/pictures/category/tit1']").click
+        end
+        current_path.should == '/pictures/category/tit1'
+        number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
+        number_of_columns.length.should == 1
+        within '#navigation' do
+          find(:xpath, "//a[@href='/pictures/category/tit2']").click
+        end
+        current_path.should == '/pictures/category/tit2'
+        number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
+        number_of_columns.length.should == 2
+        find(:xpath, "//a[@href='/pictures']").click
+        within ('.pagination') do
+         first(:css, "a[href='/pictures/page/3']").click
+        end
+        current_path.should == '/pictures/page/3'
+        number_of_columns = page.all(:xpath, "//li[@class='picture-box']")
+        number_of_columns.length.should == 1
+        number_of_columns = page.all(:xpath, "//p[@class='last_comments']")
+        number_of_columns.length.should == 5
+        within ('#pusher_result') do
+          first(:css, "p[class='last_comments'] a").click
+        end
+        current_path.should == "/pictures/1"
+        page.should have_content('My comment2','My comment1')
+        fill_in 'comment[body]', :with=> 'new comment about big big tits'
+        click_button ('Add comment')
+        current_path.should == "/users/sign_in"
+        page.should have_content('You need to sign in or sign up before continuing.')
         fill_in 'user[email]', :with => 'one@mail.ru'
         fill_in 'user[password]', :with => '12345678'
         click_button('Sign in')
+        current_path.should == '/'
+        first(:css, ".picture-box .cap-left a img").click
+        current_path.should == '/pictures/11'
+        fill_in 'comment[body]', :with=> 'new comment about big big tits'
+        click_button ('Add comment')
+        current_path.should == '/pictures/11'
+        page.should have_content('new comment about big big tits','one@mail.ru')
+
+    #it "allows chatting" do
+    #  in_browser(:one) do
+    #    sign_in_as "joe"
+    #
+    #    visit "/chat"
+    #  end
+    #
+    #  in_browser(:two) do
+    #    sign_in_as "bob"
+    #
+    #    visit "/chat"
+    #  end
+    #
+    #  in_browser(:one) do
+    #    page.should have_content("bob just entered the chat")
+    #    add_comment "Hey Bob"
+    #  end
+    #
+    #  in_browser(:two) do
+    #    page.should have_content("Hey Bob")
+    #    add_comment "Hey Joe"
+    #  end
+        visit '/'
       end
 
-      in_browser('user') do
-        visit '/pictures'
-
-
-          visit 'users/sign_in'
-          fill_in 'user[email]', :with => 'one@mail.ru'
+      in_browser('two') do
+          visit '/users/sign_in'
+          fill_in 'user[email]', :with => 'two@mail.ru'
           fill_in 'user[password]', :with => '12345678'
           click_button('Sign in')
 
       end
-    end
-    end
+      in_browser('one') do
+        visit '/'
+      end
+      in_browser('two') do
+        within ('#pusher_result') do
+          first(:css, "p[class='last_comments'] a").click
+        end
+        visit '/'
+      end
+      in_browser('two') do
+        sleep(10)
+        first(:css, '.show_private_chat').click
+        fill_in 'mess',:with => 'hallo! how are you?'
+        find(:css, ".sending_message_button").click
+
+        puts Message.all.pretty_inspect
+        puts Message.count.inspect
+      end
+      in_browser('one') do
+
+        page.should have_content('hallo! how are you?')
+        fill_in 'mess',:with => 'fine!and you?'
+        find(:css, ".sending_message_button").click
+
+        puts Message.all.pretty_inspect
+        puts Message.count.inspect
+      end
+      in_browser('two') do
+        page.should have_content('fine!and you?')
+      end
+
+
+  end
+end
+end
 
 
 

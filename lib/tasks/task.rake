@@ -1,4 +1,4 @@
-task :picture => :environment do
+task :show => :environment do
   Dir.chdir("#{Rails.root}/db/seed/pic_dir") do |dir|
     Dir.open(dir)
     if File.directory?(dir)

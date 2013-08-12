@@ -11,12 +11,12 @@ describe CategoriesController do
        sign_in @user
        @user_cat = FactoryGirl.create(:user_category,:category_id => @cat.id, :user_id => @user.id)
        @ano_pic = FactoryGirl.create(:another_picture)
-       @pic = FactoryGirl.create(:picture)
+       @pic = FactoryGirl.create(:show)
 
      end
      it "current user check likes for current picture with exist like" do
        post :subscribe
-       Category.count.should == 1
+       Category.count.should == 2
        UserCategory.count.should == 1
        @user.categories.count.should == 1
      end

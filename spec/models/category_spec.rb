@@ -35,7 +35,7 @@ describe Category do
   context "check " do
     before :each do
      @cat =  FactoryGirl.create(:category)
-     @cat.pictures << FactoryGirl.create(:picture)
+     @cat.pictures << FactoryGirl.create(:show)
     end
 
     it "create category" do

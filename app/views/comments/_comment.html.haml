@@ -1,11 +1,16 @@
-.comments-box
-  %div
-    %h6
-      = t('comments.posted')
-      = time_ago_in_words(comment.created_at)
-      = t('comments.ago')
-      %br
+-@comments.each do |comment|
+  %tr.comment
+    %td
+      %h6
+        = t('comments.posted')
+        = time_ago_in_words(comment.created_at)
+        = t('comments.ago')
+    %td
       = t('comments.sender')
       = comment.user.email
       %br
-      =comment.body
+    %td
+      = comment.body
+
+
+

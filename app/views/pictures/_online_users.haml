@@ -1,0 +1,7 @@
+.user_chat.pull-right
+  %p
+    = t('views.users_online')
+  -@users.each do |user|
+    %p.show_private_chat{id: user.id}
+      %span
+        = user.email

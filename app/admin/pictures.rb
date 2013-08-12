@@ -31,7 +31,7 @@ ActiveAdmin.register Picture do
     def create
       super
       if  @picture.save
-        cat_id = params[:picture][:category_ids]
+        cat_id = params[:show][:category_ids]
         user_id = UserCategory.find_all_by_category_id(cat_id)
         c_id =[]
         puts user_id.map { |cat| c_id << cat.category_id  }

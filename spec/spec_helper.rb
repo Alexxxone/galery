@@ -28,12 +28,18 @@ RSpec.configure do |config|
   config.order = "random"
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, :type => :controller
-
   Capybara.current_driver = Capybara.javascript_driver
+
+  Capybara.javascript_driver = :selenium
+  Capybara.server_port = 3000
+  Capybara.server_host = '0.0.0.0'
+
 
 end
 def in_browser(name)
+
   Capybara.session_name = name
   yield
+
 end
 

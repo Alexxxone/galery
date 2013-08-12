@@ -23,7 +23,7 @@ describe Picture do
 
   it { should allow_mass_assignment_of(:title) }
   it { should allow_mass_assignment_of(:filename) }
-  it { FactoryGirl.build(:picture).respond_to?( :category_ids ).should be_true}
+  it { FactoryGirl.build(:show).respond_to?( :category_ids ).should be_true}
   it { should ensure_length_of(:title).
                   is_at_least(3).
                   is_at_most(255) }
@@ -31,7 +31,7 @@ describe Picture do
   context "scopes" do
     before :each do
       cat = FactoryGirl.create(:category)
-      @pic =  FactoryGirl.create(:picture)
+      @pic =  FactoryGirl.create(:show)
       cat.pictures <<  @pic
     end
 

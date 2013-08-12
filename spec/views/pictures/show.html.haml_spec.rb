@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "pictures/show" do
   before(:each) do
-    @picture = assign(:picture, stub_model(Picture,
+    @picture = assign(:show, stub_model(Picture,
       :title => "Title",
       :string => "String",
       :data => "Data",

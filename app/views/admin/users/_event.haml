@@ -18,7 +18,7 @@
           - if event.eventable.class == Url
             = link_to event.eventable.url, event.eventable.url
           - else
-            = image_tag event.eventable.picture.filename_url(:thumb)
+            = image_tag event.eventable.show.filename_url(:thumb)
         %td
           = time_ago_in_words(event.created_at)+" ago"
 

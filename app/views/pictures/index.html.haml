@@ -1,3 +1,6 @@
+= render :partial => 'last_comments', :locals => {:users => @last_comments}
+- if !@users.blank?
+  = render :partial => 'online_users', :locals => {:users => @users}
 - cache "menu" do
   .search.pull-right
     .field

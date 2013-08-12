@@ -3,6 +3,11 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $(document).ready ->
+  $("#comments").infinitescroll
+    navSelector: "nav.pagination" # selector for the paged navigation (it will be hidden)
+    nextSelector: "nav.pagination a[rel=next]" # selector for the NEXT link (to page 2)
+    itemSelector: "#comments tr.comment" # selector for all items you'll retrieve
+    console.log 'infinitescroll'
   current_user_id = gon.current_user || ''
   Pusher.host = '127.0.0.1'
   Pusher.ws_port = 8080
@@ -19,7 +24,7 @@ $(document).ready ->
     event.preventDefault()
 
 #change language
-  $("#language").click (event)->
+  $("#language").change (event)->
     language = $(event.currentTarget).find('option:selected').val()
     $.ajax(
       url: "/pictures/select_language"
@@ -40,19 +45,6 @@ $(document).ready ->
       using: (position, feedback) ->
         $(this).css position
         $("<div>").addClass("arrow").addClass(feedback.vertical).addClass(feedback.horizontal).appendTo this
-#check likes
-  check_like = ->
-    pic_id = $("#like").attr("name")
-    $.ajax(
-      url: "/pictures/like"
-      data:
-        check: "check",
-        pic_id: pic_id
-      dataType: "json"
-      type: "post"
-    ).success (response) ->
-      $("#like").css "opacity", response.like
-      $(".all_likes span").html response.all_likes
 #check subcribed categories
   check_subscribe = ->
     $.ajax(
@@ -66,9 +58,15 @@ $(document).ready ->
   pusher = new Pusher('40c797d047b5b2d43e30', { encrypted: false })
   channel = pusher.subscribe('test-channel')
   channel.bind "test-event",  (response)->
-    $('.last_comments:first').before("<p class='last_comments'><a href=' "+response.picture+" '>"+response.comment.slice(1,-1)+"</a></p>")
-    $('.last_comments:last').remove()
-  check_like()
+    if $('.last_comments:first').length
+      $('.last_comments:first').before("<p class='last_comments'><a href=' "+response.picture+" '>"+response.comment.body+"</a></p>")
+    else
+      $('#pusher_result').append("<p class='last_comments'><a href=' "+response.picture+" '>"+response.comment.body+"</a></p>")
+    console.log $('.last_comments').length
+    if $('.last_comments').length > 5
+      $('.last_comments:last').remove()
+    if $('#new_comment').length
+      $('#comments .page').prepend("<tr class = 'comment'><td><h6>#{ response.comment.created_at }</h6></td><td>#{response.sender_email}</br></td><td>#{response.comment.body}</td></tr>");
   check_subscribe()
   $("#like").click ->
     pic_id = $("#like").attr("name")
@@ -176,8 +174,8 @@ get_chat_messages = (opponent_id,user_chat) ->
   this_chat = $(context).parent()
   text = this_chat.find('input').val()
   if text.length >= 1
+    current_user_id = gon.current_user
     opponent_id = this_chat.find('.receiver').attr('id')
-    current_user_id = document.getElementById('current_user_id').getAttribute('class')
     max = Math.max(current_user_id,opponent_id)
     min = Math.min(current_user_id,opponent_id)
     event_name = 'pri-event'+min+'i'+max

@@ -13,7 +13,15 @@
  *= require active_admin
  */
 
+.alert{
+  color:red;
+  position:absolute;
 
+}
+.notice{
+  @extend .alert;
+  color:greenyellow;
+}
 
 //page transiction
 html, body {
@@ -22,12 +30,12 @@ html, body {
 body {
   width: 100%;
   overflow: auto;
-  background-image:url('bg2.jpg') ;
+  background:url('bg2.jpg');
 }
 
 body .footer{
   position:relative;
-  top:82%;
+  top:70%;
 }
 ul li{
   list-style: none;
@@ -46,7 +54,6 @@ body .pagination span{
   line-height: 50px;
   padding: 0px 10px;
   margin-bottom: 6px;
-
   font-size: 14px;
 }
 body .pagination span a{
@@ -70,30 +77,22 @@ body .pagination span a{
   padding: 20px;
   background: #000;
 }
-#pusher_result{
-  padding: 10px;
-  right: 2%;
-  top: 37%;
-  position: absolute;
-  width:19%;
 
-}
-#pusher_result .last_comments:nth-child(even){
-  background-color: lightcyan;
-}
+
 #navigation {
   margin-top: 120px;
   display:block;
   list-style:none;
   z-index:3;
+  img:hover {
+    height: 40px;
+    width:60px;
+  }
 }
 #navigation a{
-
   border-radius: 5px;
   color: #444;
   display: block;
-  background: #fff;
-  background: rgba(255,255,255,0.5);
   line-height: 50px;
   padding: 0px 20px;
   text-transform: uppercase;
@@ -108,17 +107,20 @@ body .pagination span a{
   background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* IE10+ */
   background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.66) 53%,rgba(255,255,255,0.63) 58%,rgba(255,255,255,0) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
-
+  &:hover{
+    text-shadow: 0px -5px 3px grey;
+    color: rgba(255, 92, 0, 0.73);
+    box-shadow:0px -10px 20px rgba(255, 92, 0, 0.3);
+    background-image:none;
+  }
 }
-#navigation a:hover {
-
-  text-shadow: 0px -5px 3px grey;
-  color: rgba(255, 92, 0, 0.73);
-  box-shadow:0px -10px 20px rgba(255, 92, 0, 0.3);
-  background-image:none;
+#navigation li:hover a {
+  margin-left:+10px;
+  margin-right:+10px;
 }
-#navigation img:hover {
+#navigation li:hover img {
   height: 40px;
   width:60px;
+  left:-10px;
 }
 

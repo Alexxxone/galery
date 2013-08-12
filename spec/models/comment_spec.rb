@@ -25,7 +25,7 @@ describe Comment do
       of_type(:datetime).
       with_options(:null => false)}
 
-  it { should belong_to(:picture).touch(true) }
+  it { should belong_to(:show).touch(true) }
   it { should belong_to(:user) }
 
   it { should have_many(:events) }
@@ -42,7 +42,7 @@ describe Comment do
   context "check" do
     before :each do
       @user = FactoryGirl.create(:user)
-      @pic =  FactoryGirl.create(:picture)
+      @pic =  FactoryGirl.create(:show)
       @com =  FactoryGirl.create(:comment,:picture_id => @pic.id, :user_id => @user.id)
 
     end

@@ -1,0 +1,9 @@
+#pusher_result
+  %p
+    = t('application.last_comments')
+  -if !@last_comments.blank?
+    -@last_comments.each do |comment|
+      %p.last_comments
+        =link_to comment.body.truncate(30),picture_path(comment.picture.id)
+
+

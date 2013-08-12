@@ -8,7 +8,7 @@ describe PicturesController do
     end
 
     it "routes to #show" do
-      get("/pictures/1").should route_to("pictures#show", :id => "1")
+      get("/pictures/1").should route_to("picture", :id => "1")
     end
 
     it "routes to #index search" do

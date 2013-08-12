@@ -5,23 +5,15 @@ describe MessagesController do
 
   context "Message Controller" do
     before :each do
-      @pic = FactoryGirl.create(:picture)
-      @user = FactoryGirl.create(:user)
+      @pic = FactoryGirl.create(:show)
+      @user = FactoryGirl.create(:user,:email => 'one@mail.ru' ,:password => '12345678',:password_confirmation =>'12345678')
+      @user2 = FactoryGirl.create(:user,:email => 'two@mail.ru' ,:password => '12345678',:password_confirmation =>'12345678')
     end
 
     it "asd" do
-
+       FactoryGirl.create(:message, :sender_id => @user.id, :receiver_id => @user2.id )
+       FactoryGirl.create(:message, :sender_id => @user2.id, :receiver_id => @user.id )
     end
 
   end
 end
-
-  #def create
-  #  message = Message.create(:sender_id => current_user.id, :receiver_id => params[:receiver_id], :text =>params[:text])
-  #  user = User.where(:id => current_user.id).first
-  #
-  #  if message.save
-  #    Pusher["private-channel"].trigger("#{params[:event_name]}",message: message.text.to_json, user: user,:receiver_id =>params[:receiver_id])
-  #  end
-  #  render json: {}
-  #end

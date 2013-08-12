@@ -23,6 +23,7 @@ class Comment < ActiveRecord::Base
   def controller_name
     'comments'
   end
+  paginates_per 5
   #test
   validates_presence_of :body,:picture_id,:user_id
 end

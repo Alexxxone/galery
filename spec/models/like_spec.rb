@@ -28,14 +28,14 @@ describe Like do
     it { should validate_presence_of(:picture_id) }
     it { should validate_presence_of(:user_id) }
 
-    it { should belong_to(:picture) }
+    it { should belong_to(:show) }
     it { should belong_to(:user) }
     it { should have_many(:events).dependent(:destroy)}
     it { should validate_uniqueness_of(:user_id).scoped_to(:picture_id) }
 
   context "check" do
     before :each do
-      @pic = FactoryGirl.create(:picture)
+      @pic = FactoryGirl.create(:show)
       @user = FactoryGirl.create(:user)
       FactoryGirl.create(:like, :picture_id => @pic.id, :user_id => @user.id)
     end

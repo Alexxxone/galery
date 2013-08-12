@@ -1,17 +1,15 @@
-class PicturesController < ApplicationController
-  caches_action :get_categories
-  cache_sweeper :pictures_sweeper, :only => [:create, :get_last_comments ]
 
+class PicturesController < ApplicationController
+  #caches_action :get_categories
+  #cache_sweeper :pictures_sweeper, :only => [:create, :get_last_comments ]
+  #expire_page(:controller => "action", :action => %w( index create ))
   before_filter :get_categories
   before_filter :authenticate_user!,:only => [:edit, :new, :destroy, :create, :update,:like]
-  before_filter :get_last_comments
+  before_filter :get_last_comments_and_users
   before_filter :set_last_request_at, :if => :user_signed_in?
 
 
-#  expire_page(:controller => "action", :action => %w( index create ))
-
   def index
-    @users = User.where(["id != #{current_user.id} AND last_request_at > ? ", 5.minutes.ago] ).order("email DESC") if current_user
     @search = Picture.order("created_at DESC").page(params[:page]).search(params[:q])
     @pictures =  @search.result
     respond_to do |format|
@@ -22,9 +20,12 @@ class PicturesController < ApplicationController
 
   def show
    if Picture.where(id: params[:id]).first
-     @picture = Picture.preload(:comments => :user).where(:id => params[:id]).first
+     @all_likes = Like.where(:picture_id => params[:id]).length
+     @picture = Picture.where(:id => params[:id]).first
+     @comments = Comment.preload([:user,:picture]).where(:picture_id=>params[:id]).order('created_at DESC').page(params[:page])
      respond_to do |format|
        format.html
+       format.js
      end
    else
       redirect_to root_path, :alert => 'No such picture.'
@@ -82,9 +83,10 @@ class PicturesController < ApplicationController
     @categories = Category.all
   end
   private
-  def get_last_comments
+  def get_last_comments_and_users
     gon.current_user = current_user.try(:id) || ''
-    @last_comments = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
+    @users = User.where(["id != #{current_user.id} AND last_request_at > ? ", 5.minutes.ago] ).order("email DESC") if current_user
+    @last_comments = Comment.includes([:user,:picture]).last(5).sort_by{|e| -e[:id]}
   end
   private
   def set_last_request_at
