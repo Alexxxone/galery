@@ -233,6 +233,7 @@ GEM
       polyamorous (~> 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    redis (3.0.4)
     ref (1.0.5)
     responders (0.9.3)
       railties (~> 3.1)
@@ -350,6 +351,7 @@ DEPENDENCIES
   rabl-rails
   rails (= 3.2.13)
   ransack
+  redis
   rmagick (~> 2.13.2)
   rspec-rails
   ruby-growl

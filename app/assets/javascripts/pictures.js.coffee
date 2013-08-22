@@ -3,11 +3,12 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $(document).ready ->
+
+  console.log 'asasdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasasdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.substring(0,20)
   $("#comments").infinitescroll
     navSelector: "nav.pagination" # selector for the paged navigation (it will be hidden)
     nextSelector: "nav.pagination a[rel=next]" # selector for the NEXT link (to page 2)
     itemSelector: "#comments tr.comment" # selector for all items you'll retrieve
-    console.log 'infinitescroll'
   current_user_id = gon.current_user || ''
   Pusher.host = '127.0.0.1'
   Pusher.ws_port = 8080
@@ -59,14 +60,13 @@ $(document).ready ->
   channel = pusher.subscribe('test-channel')
   channel.bind "test-event",  (response)->
     if $('.last_comments:first').length
-      $('.last_comments:first').before("<p class='last_comments'><a href=' "+response.picture+" '>"+response.comment.body+"</a></p>")
+      $('.last_comments:first').before("<p class='last_comments'><a href='/pictures/"+response.picture+" '>"+response.comment.body.substring(0,27)+"...</a></p>")
     else
       $('#pusher_result').append("<p class='last_comments'><a href=' "+response.picture+" '>"+response.comment.body+"</a></p>")
-    console.log $('.last_comments').length
     if $('.last_comments').length > 5
       $('.last_comments:last').remove()
     if $('#new_comment').length
-      $('#comments .page').prepend("<tr class = 'comment'><td><h6>#{ response.comment.created_at }</h6></td><td>#{response.sender_email}</br></td><td>#{response.comment.body}</td></tr>");
+      $('#comments .page').prepend("<tr class = 'comment'><td><h6> #{ I18n.t('comments.javatime', {count: 1 })}</h6></td><td>#{response.sender_email}</br></td><td>#{response.comment.body}</td></tr>");
   check_subscribe()
   $("#like").click ->
     pic_id = $("#like").attr("name")

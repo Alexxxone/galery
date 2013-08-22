@@ -32,6 +32,9 @@ de:
     posted: 'Geschrieben'
     sender: 'Absender :'
     ago: 'zuvor'
+    javatime:
+      one: weniger als eine Minute
+      other:  weniger als %{count} Minuten
   date:
     abbr_day_names:
     - So

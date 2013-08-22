@@ -4,10 +4,10 @@
 #file:///home/user3/WORK/faceit/galery/coverage/index.html#_AllFiles
 #  поправить в нормальный путь
 #for checking test coverage ->
-  require 'simplecov'
-  SimpleCov.start 'rails'
-  SimpleCov.root("/coverage")
-  puts "required simplecov"
+#  require 'simplecov'
+#  SimpleCov.start 'rails'
+#  SimpleCov.root("/coverage")
+#  puts "required simplecov"
 #<-
 
 APP_PATH = File.expand_path('../../config/application',  __FILE__)

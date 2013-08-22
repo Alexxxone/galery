@@ -8,7 +8,6 @@ class PicturesController < ApplicationController
   before_filter :get_last_comments_and_users
   before_filter :set_last_request_at, :if => :user_signed_in?
 
-
   def index
     @search = Picture.order("created_at DESC").page(params[:page]).search(params[:q])
     @pictures =  @search.result
@@ -86,7 +85,7 @@ class PicturesController < ApplicationController
   def get_last_comments_and_users
     gon.current_user = current_user.try(:id) || ''
     @users = User.where(["id != #{current_user.id} AND last_request_at > ? ", 5.minutes.ago] ).order("email DESC") if current_user
-    @last_comments = Comment.includes([:user,:picture]).last(5).sort_by{|e| -e[:id]}
+    @last_comments = Comment.includes(:picture).last(5).sort_by{|e| -e[:id]}
   end
   private
   def set_last_request_at

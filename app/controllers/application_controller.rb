@@ -8,11 +8,11 @@ class ApplicationController < ActionController::Base
   def set_user_language
     if session[:language]
       I18n.locale = session[:language]
-      gon.default_locale = session[:language]
     else
       I18n.locale = 'en'
-    end
 
+    end
+    gon.glocale = I18n.locale
   end
 
   def tracking (type='track_url',data = {:url=>request.url,:user_id=> current_user})

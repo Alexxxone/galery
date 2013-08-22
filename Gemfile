@@ -65,8 +65,6 @@ gem "nokogiri"
 gem "curb"
 
 
-
-
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :rbx]
@@ -81,6 +79,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'puma'
   gem 'thin'
+  gem 'redis'
   gem 'annotate'
 end
 

@@ -18,6 +18,7 @@ en:
     welcome: 'Welcome back :'
     last_comments: "Last comments"
   buttons:
+    gutten_tag: 'Gutten tag'
     sign_in_facebook: "Sign in with Facebook"
     sign_in: "Sign in"
     sign_up: "Sign up"
@@ -26,9 +27,16 @@ en:
     admin_enter: 'Admin enter'
     search: 'Search'
   pictures:
+    place: 'Search'
     placeholder: 'Search picture by title ...'
   comments:
     title: 'Title :'
     posted: 'Posted'
     sender: 'Sender :'
     ago: 'ago'
+    asdas: 'a'
+    javatime:
+      one: "Posted less than one minute ago"
+      other: "Posted %{count} minute ago"
+
+

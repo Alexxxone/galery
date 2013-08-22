@@ -11,7 +11,7 @@ Gallery::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users, :controllers => {:registrations => "registrations", :sessions => 'sessions'}
-  devise_scope :users do
+  devise_for :users do
     get '/auth/:provider/callback' =>  'sessions#facebook'
   end
   post "/admin/parser/create_picture" => "admin/parser#create_picture"

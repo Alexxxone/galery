@@ -1,0 +1,36 @@
+= render :partial => 'last_comments', :locals => {:users => @last_comments}
+- if !@users.blank?
+  = render :partial => 'online_users', :locals => {:users => @users}
+- cache "menu" do
+  .search.pull-right
+    .field
+      = search_form_for @search, url: search_pictures_path, method: :post do |f|
+        = f.text_field :title_cont
+        .actions
+          = f.submit "Search"
+  #header.span4
+    %ul#navigation
+      - @categories.each do |category|
+        %li{id: 'link-'"#{category.name}"}
+          = image_tag 'subscribe.png',class:'pull-right subscribe',name:category.id
+          = link_to category.name, "/pictures/category/#{category.name}", id: category.name
+- cache @pictures do
+  .content.span6
+    %h2
+      - @img.each do |a|
+        =a
+      = link_to t('application.title'),root_path
+    %span.sorting_links
+      = sort_link @search, :title, "Title"
+      = sort_link @search, :created_at, "Release Date"
+      = sort_link @search, :filename, "Name"
+    %span
+      = paginate @pictures, :window => 2, :params => { _: nil, _method: nil, authenticity_token: nil, commit: nil, utf8: nil}
+    %ul
+      - @pictures.each do |picture|
+        %li.picture-box
+          %figure.cap-left
+            %a{href:picture_path(picture)}
+              = image_tag picture.filename.url(:thumb)
+            %figcaption
+              = picture.title
