@@ -19,7 +19,9 @@
 db/*.sqlite3
 /log/*
 /tmp/*
-
+/redis-2.6.14/
+/coverage/
+/config/initializers/redis.rb
 # various artifacts
 **.war
 *.rbc

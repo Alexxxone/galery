@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.new(params[:comment])
     @comment.picture_id=@picture.id
 
-    $redis.set(:comment, @comment.id, :body, @comment.body)
+   # $redis.set(:comment, @comment.id, :body, @comment.body)
 
     if @comment.save
       sender_email = @comment.user.email
