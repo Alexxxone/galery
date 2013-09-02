@@ -1,6 +1,6 @@
 #= require jquery
 #= require jquery_ujs
-#= require jquery
+#= require jquery.ui.all
 #= require active_admin/application
 #= require pusher.min
 $(document).ready ->

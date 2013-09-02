@@ -3,12 +3,10 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $(document).ready ->
-
-  console.log 'asasdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasasdasdasdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'.substring(0,20)
   $("#comments").infinitescroll
     navSelector: "nav.pagination" # selector for the paged navigation (it will be hidden)
     nextSelector: "nav.pagination a[rel=next]" # selector for the NEXT link (to page 2)
-    itemSelector: "#comments tr.comment" # selector for all items you'll retrieve
+    itemSelector: "#comments .page" # selector for all items you'll retrieve
   current_user_id = gon.current_user || ''
   Pusher.host = '127.0.0.1'
   Pusher.ws_port = 8080

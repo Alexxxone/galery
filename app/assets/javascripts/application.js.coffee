@@ -12,7 +12,6 @@
 #//
 #= require jquery
 #= require jquery_ujs
-#= require jquery
 #= require pictures
 #= require active_admin
 #= require jquery.infinitescroll
